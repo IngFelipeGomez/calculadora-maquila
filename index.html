@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora Maquila — Planta Delta</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal-dark: #0a4a38;
+    --teal-mid: #0f6e56;
+    --teal-light: #1d9e75;
+    --teal-pale: #e1f5ee;
+    --teal-xpale: #f0faf6;
+    --blue-dark: #0c447c;
+    --blue-mid: #185fa5;
+    --blue-pale: #e6f1fb;
+    --amber-dark: #633806;
+    --amber-mid: #ba7517;
+    --amber-pale: #faeeda;
+    --red-mid: #a32d2d;
+    --red-pale: #fcebeb;
+    --gray-900: #1a1a1a;
+    --gray-700: #3d3d3d;
+    --gray-500: #6b6b6b;
+    --gray-300: #d0d0d0;
+    --gray-100: #f5f5f5;
+    --white: #ffffff;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "DM Sans", sans-serif;
+    background: #f2f4f3;
+    min-height: 100vh;
+    color: var(--gray-900);
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--teal-dark);
+    padding: 0 32px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  header .logo {
+    font-family: "DM Mono", monospace;
+    font-size: 13px;
+    color: var(--teal-light);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  header .title {
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.9);
+  }
+  header .params-btn {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 20px;
+    padding: 5px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: "DM Sans", sans-serif;
+  }
+  header .params-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+  /* ── PARAMS BAR ── */
+  .params-bar {
+    background: var(--teal-mid);
+    padding: 8px 32px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .param-chip {
+    font-size: 11px;
+    color: rgba(255,255,255,0.75);
+    font-family: "DM Mono", monospace;
+  }
+  .param-chip span { color: #fff; font-weight: 500; }
+
+  /* ── MAIN LAYOUT ── */
+  main {
+    max-width: 900px;
+    margin: 28px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid #e8e8e8;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 12px 18px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-header .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--teal-light);
+    flex-shrink: 0;
+  }
+  .card-header h2 {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--gray-500);
+  }
+  .card-body { padding: 16px 18px; }
+
+  /* ── SLIDER ROWS ── */
+  .slider-row {
+    margin-bottom: 14px;
+  }
+  .slider-row:last-child { margin-bottom: 0; }
+  .slider-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .slider-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gray-700);
+  }
+  .slider-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .slider-input-wrap input[type="text"] {
+    width: 72px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-family: "DM Mono", monospace;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    text-align: right;
+    color: var(--gray-900);
+    background: var(--gray-100);
+    transition: border-color 0.2s;
+  }
+  .slider-input-wrap input[type="text"]:focus {
+    outline: none;
+    border-color: var(--teal-light);
+    background: var(--teal-xpale);
+  }
+  .slider-unit {
+    font-size: 11px;
+    color: var(--gray-500);
+    min-width: 44px;
+  }
+  .status-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-family: "DM Mono", monospace;
+  }
+  .status-ok { background: var(--teal-pale); color: var(--teal-mid); }
+  .status-low { background: var(--red-pale); color: var(--red-mid); }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--gray-300);
+    outline: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  input[type="range"].ok { background: linear-gradient(to right, var(--teal-light) var(--pct, 50%), var(--gray-300) var(--pct, 50%)); }
+  input[type="range"].low { background: linear-gradient(to right, #e24b4a var(--pct, 50%), var(--gray-300) var(--pct, 50%)); }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--white);
+    border: 2px solid var(--teal-light);
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.1s;
+  }
+  input[type="range"].low::-webkit-slider-thumb { border-color: #e24b4a; }
+  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+
+  /* ── RESULTS SECTION ── */
+  .results-card { grid-column: 1 / -1; }
+
+  .intermedios {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .inter-item {
+    background: var(--gray-100);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+  }
+  .inter-item .ilabel {
+    font-size: 11px;
+    color: var(--gray-500);
+    margin-bottom: 3px;
+  }
+  .inter-item .ivalue {
+    font-size: 15px;
+    font-weight: 500;
+    font-family: "DM Mono", monospace;
+    color: var(--gray-900);
+  }
+
+  /* ── COMPARISON TABLE ── */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .comp-table th {
+    padding: 8px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    text-align: right;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .comp-table th:first-child { text-align: left; color: var(--gray-500); }
+  .comp-table th.col-real { color: var(--blue-mid); background: var(--blue-pale); border-radius: 6px 6px 0 0; }
+  .comp-table th.col-exig { color: var(--amber-dark); background: var(--amber-pale); border-radius: 6px 6px 0 0; }
+  .comp-table th.col-diff { color: var(--gray-700); }
+  .comp-table td {
+    padding: 9px 12px;
+    text-align: right;
+    border-bottom: 1px solid #f8f8f8;
+    font-family: "DM Mono", monospace;
+    font-size: 12px;
+  }
+  .comp-table td:first-child {
+    text-align: left;
+    font-family: "DM Sans", sans-serif;
+    font-size: 12px;
+    color: var(--gray-700);
+    font-weight: 500;
+  }
+  .comp-table td.col-real { background: var(--blue-pale); color: var(--blue-dark); }
+  .comp-table td.col-exig { background: var(--amber-pale); color: var(--amber-dark); }
+  .comp-table tr.total td {
+    font-weight: 600;
+    font-size: 13px;
+    border-top: 2px solid #f0f0f0;
+    padding-top: 12px;
+  }
+  .diff-pos { color: var(--teal-mid); }
+  .diff-neg { color: var(--red-mid); }
+
+  /* ── BIG VALUE ── */
+  .big-value-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--teal-dark);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    margin-top: 16px;
+  }
+  .big-value-row .bvlabel {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+  }
+  .big-value-row .bvvalue {
+    font-size: 26px;
+    font-weight: 500;
+    color: #fff;
+    font-family: "DM Mono", monospace;
+  }
+  .big-value-row .bvdelta {
+    font-size: 13px;
+    font-family: "DM Mono", monospace;
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+  .bvdelta.pos { background: rgba(29,158,117,0.25); color: #5dcaa5; }
+  .bvdelta.neg { background: rgba(226,75,74,0.25); color: #f09595; }
+
+  /* ── PIN MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 28px;
+    width: 320px;
+    border: 1px solid #e8e8e8;
+  }
+  .modal h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--gray-900);
+  }
+  .modal p {
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-bottom: 18px;
+  }
+  .modal input[type="password"] {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    font-size: 18px;
+    text-align: center;
+    letter-spacing: 0.3em;
+    font-family: "DM Mono", monospace;
+    margin-bottom: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .modal input[type="password"]:focus { border-color: var(--teal-light); }
+  .modal-error { font-size: 12px; color: var(--red-mid); margin-bottom: 10px; display: none; }
+  .modal-btns { display: flex; gap: 8px; }
+  .btn-cancel {
+    flex: 1; padding: 9px; border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm); background: var(--white);
+    font-size: 13px; cursor: pointer; font-family: "DM Sans", sans-serif;
+    color: var(--gray-700);
+  }
+  .btn-ok {
+    flex: 1; padding: 9px; border: none;
+    border-radius: var(--radius-sm); background: var(--teal-mid);
+    font-size: 13px; cursor: pointer; font-family: "DM Sans", sans-serif;
+    color: #fff; font-weight: 500;
+  }
+
+  /* ── PARAMS PANEL ── */
+  .params-panel {
+    display: none;
+    grid-column: 1 / -1;
+    background: var(--white);
+    border-radius: var(--radius);
+    border: 1px solid #e8e8e8;
+    overflow: hidden;
+  }
+  .params-panel.show { display: block; }
+  .params-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 16px 18px;
+  }
+  .param-field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--gray-500);
+    margin-bottom: 5px;
+  }
+  .param-field input {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-family: "DM Mono", monospace;
+    color: var(--blue-mid);
+    background: var(--blue-pale);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .param-field input:focus { border-color: var(--blue-mid); }
+  .params-footer {
+    padding: 12px 18px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  .btn-save {
+    padding: 8px 20px; background: var(--teal-mid); color: #fff;
+    border: none; border-radius: var(--radius-sm); font-size: 13px;
+    cursor: pointer; font-family: "DM Sans", sans-serif; font-weight: 500;
+  }
+  .btn-close-params {
+    padding: 8px 20px; background: var(--white); color: var(--gray-700);
+    border: 1px solid var(--gray-300); border-radius: var(--radius-sm);
+    font-size: 13px; cursor: pointer; font-family: "DM Sans", sans-serif;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">ENAMI · Planta Delta</div>
+  <div class="title">Calculadora Método Maquila</div>
+  <button class="params-btn" onclick="abrirPIN()">⚙ Parámetros</button>
+</header>
+
+<div class="params-bar" id="paramsBar">
+  <div class="param-chip">Refino: <span id="chipRefino">4.3</span> cUS$/lb</div>
+  <div class="param-chip">Descuento: <span id="chipDescuento">3.8</span>%</div>
+  <div class="param-chip">Fusión: US$<span id="chipFusion">43</span>/TMS</div>
+  <div class="param-chip">Factor: <span id="chipFactor">22.046</span></div>
+  <div class="param-chip">Rec. exig.: <span id="chipRecExig">90.98</span>%</div>
+  <div class="param-chip">Ley exig.: <span id="chipLeyExig">26.21</span>%</div>
+</div>
+
+<main>
+
+  <!-- Panel parámetros (oculto) -->
+  <div class="params-panel" id="paramsPanel">
+    <div class="card-header" style="background:#f8f8f8;">
+      <div class="dot" style="background:var(--amber-mid)"></div>
+      <h2>Parámetros del contrato — Actualizar 1 vez al año</h2>
+    </div>
+    <div class="params-grid">
+      <div class="param-field">
+        <label>Cargo refino (cUS$/lb)</label>
+        <input type="number" id="pRefino" value="4.3" step="0.01">
+      </div>
+      <div class="param-field">
+        <label>Descuento metalúrgico (%)</label>
+        <input type="number" id="pDescuento" value="3.8" step="0.1">
+      </div>
+      <div class="param-field">
+        <label>Cargo fusión (US$/TMS)</label>
+        <input type="number" id="pFusion" value="43" step="0.5">
+      </div>
+      <div class="param-field">
+        <label>Factor conversión</label>
+        <input type="number" id="pFactor" value="22.046223" step="0.000001">
+      </div>
+      <div class="param-field">
+        <label>Recuperación exigida (%)</label>
+        <input type="number" id="pRecExig" value="90.98" step="0.01">
+      </div>
+      <div class="param-field">
+        <label>Ley concentrado exigida (%)</label>
+        <input type="number" id="pLeyExig" value="26.21" step="0.01">
+      </div>
+    </div>
+    <div class="params-footer">
+      <button class="btn-close-params" onclick="cerrarParams()">Cancelar</button>
+      <button class="btn-save" onclick="guardarParams()">Guardar parámetros</button>
+    </div>
+  </div>
+
+  <!-- Card izq: Variables operacionales -->
+  <div class="card">
+    <div class="card-header">
+      <div class="dot"></div>
+      <h2>Variables operacionales</h2>
+    </div>
+    <div class="card-body">
+
+      <div class="slider-row">
+        <div class="slider-meta">
+          <span class="slider-label">Tonelaje mineral</span>
+          <div class="slider-input-wrap">
+            <input type="text" id="txtTonelaje" value="57.000" onchange="desdeTexto('tonelaje')">
+            <span class="slider-unit">TMS</span>
+          </div>
+        </div>
+        <input type="range" id="sldTonelaje" min="10000" max="100000" step="500" value="57000" class="ok" oninput="desdeSlider('tonelaje')">
+      </div>
+
+      <div class="slider-row">
+        <div class="slider-meta">
+          <span class="slider-label">Precio del cobre</span>
+          <div class="slider-input-wrap">
+            <input type="text" id="txtPrecio" value="566.9" onchange="desdeTexto('precio')">
+            <span class="slider-unit">cUS$/lb</span>
+          </div>
+        </div>
+        <input type="range" id="sldPrecio" min="200" max="800" step="1" value="567" class="ok" oninput="desdeSlider('precio')">
+      </div>
+
+      <div class="slider-row">
+        <div class="slider-meta">
+          <span class="slider-label">Ley de cabeza</span>
+          <div class="slider-input-wrap">
+            <input type="text" id="txtLeyCabeza" value="1.20" onchange="desdeTexto('leyCabeza')">
+            <span class="slider-unit">% Cu</span>
+          </div>
+        </div>
+        <input type="range" id="sldLeyCabeza" min="0.5" max="3.0" step="0.01" value="1.20" class="ok" oninput="desdeSlider('leyCabeza')">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Card der: Variables metalúrgicas -->
+  <div class="card">
+    <div class="card-header">
+      <div class="dot"></div>
+      <h2>Variables metalúrgicas</h2>
+    </div>
+    <div class="card-body">
+
+      <div class="slider-row">
+        <div class="slider-meta">
+          <span class="slider-label">Recuperación Cu</span>
+          <div class="slider-input-wrap">
+            <input type="text" id="txtRecuperacion" value="92.29" onchange="desdeTexto('recuperacion')">
+            <span class="slider-unit">%</span>
+            <span class="status-badge status-ok" id="badgeRec">OK</span>
+          </div>
+        </div>
+        <input type="range" id="sldRecuperacion" min="80" max="99" step="0.01" value="92.29" class="ok" oninput="desdeSlider('recuperacion')">
+      </div>
+
+      <div class="slider-row">
+        <div class="slider-meta">
+          <span class="slider-label">Ley concentrado</span>
+          <div class="slider-input-wrap">
+            <input type="text" id="txtLeyConc" value="18.56" onchange="desdeTexto('leyConc')">
+            <span class="slider-unit">%</span>
+            <span class="status-badge status-low" id="badgeLey">BAJO</span>
+          </div>
+        </div>
+        <input type="range" id="sldLeyConc" min="10" max="40" step="0.01" value="18.56" class="low" oninput="desdeSlider('leyConc')">
+      </div>
+
+      <div style="margin-top: 18px;">
+        <div class="intermedios">
+          <div class="inter-item">
+            <div class="ilabel">Finos Cu producidos</div>
+            <div class="ivalue" id="rFinos">—</div>
+          </div>
+          <div class="inter-item">
+            <div class="ilabel">Peso seco concentrado</div>
+            <div class="ivalue" id="rPeso">—</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Card resultados full width -->
+  <div class="card results-card">
+    <div class="card-header">
+      <div class="dot" style="background:var(--amber-mid)"></div>
+      <h2>Comparativo de valorización</h2>
+    </div>
+    <div class="card-body">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th class="col-real">Real</th>
+            <th class="col-exig">Exigencia</th>
+            <th class="col-diff">Diferencia</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Finos Cu (TMF)</td>
+            <td class="col-real" id="tRealFinos">—</td>
+            <td class="col-exig" id="tExigFinos">—</td>
+            <td id="tDiffFinos">—</td>
+          </tr>
+          <tr>
+            <td>Peso seco conc. (TMS)</td>
+            <td class="col-real" id="tRealPeso">—</td>
+            <td class="col-exig" id="tExigPeso">—</td>
+            <td id="tDiffPeso">—</td>
+          </tr>
+          <tr class="total">
+            <td>Valor concentrado (USD)</td>
+            <td class="col-real" id="tRealValor">—</td>
+            <td class="col-exig" id="tExigValor">—</td>
+            <td id="tDiffValor">—</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="big-value-row">
+        <div>
+          <div class="bvlabel">Valor concentrado real</div>
+        </div>
+        <div class="bvvalue" id="bigValor">USD —</div>
+        <div class="bvdelta pos" id="bigDelta">—</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- PIN Modal -->
+<div class="modal-overlay" id="pinModal">
+  <div class="modal">
+    <h3>Acceso a parámetros</h3>
+    <p>Ingresa el PIN para editar los parámetros del contrato.</p>
+    <input type="password" id="pinInput" maxlength="6" placeholder="• • • •" onkeydown="if(event.key==='Enter') verificarPIN()">
+    <div class="modal-error" id="pinError">PIN incorrecto. Intenta nuevamente.</div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="cerrarPIN()">Cancelar</button>
+      <button class="btn-ok" onclick="verificarPIN()">Ingresar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PIN = "1234";
+
+// Parámetros (editables vía panel)
+let P = {
+  refino: 4.3,
+  descuento: 3.8,
+  fusion: 43,
+  factor: 22.046223,
+  recExig: 90.98,
+  leyExig: 26.21
+};
+
+function fmt(n, dec=2) {
+  return Number(n).toLocaleString("es-CL", {minimumFractionDigits: dec, maximumFractionDigits: dec});
+}
+function fmtUSD(n) {
+  return "USD " + Math.round(n).toLocaleString("es-CL");
+}
+function fmtDiff(n, dec=2) {
+  const s = n >= 0 ? "+" : "";
+  return s + fmt(n, dec);
+}
+
+function updateSliderTrack(el) {
+  const min = parseFloat(el.min), max = parseFloat(el.max), val = parseFloat(el.value);
+  const pct = ((val - min) / (max - min) * 100).toFixed(1);
+  el.style.setProperty("--pct", pct + "%");
+}
+
+function calcular() {
+  const tms    = parseFloat(document.getElementById("sldTonelaje").value);
+  const precio = parseFloat(document.getElementById("sldPrecio").value);
+  const leyC   = parseFloat(document.getElementById("sldLeyCabeza").value) / 100;
+  const rec    = parseFloat(document.getElementById("sldRecuperacion").value) / 100;
+  const leyConc = parseFloat(document.getElementById("sldLeyConc").value) / 100;
+
+  // Escenario real
+  const finos = tms * leyC * rec;
+  const peso  = finos / leyConc;
+  const valor = finos * (precio - P.refino) * P.factor * (1 - P.descuento/100) - peso * P.fusion;
+
+  // Escenario exigencia
+  const recE  = P.recExig / 100;
+  const leyE  = P.leyExig / 100;
+  const finosE = tms * leyC * recE;
+  const pesoE  = finosE / leyE;
+  const valorE = finosE * (precio - P.refino) * P.factor * (1 - P.descuento/100) - pesoE * P.fusion;
+
+  const delta = valor - valorE;
+
+  // Badges
+  const recNum = parseFloat(document.getElementById("sldRecuperacion").value);
+  const leyNum = parseFloat(document.getElementById("sldLeyConc").value);
+  const badgeRec = document.getElementById("badgeRec");
+  const badgeLey = document.getElementById("badgeLey");
+  const sldRec = document.getElementById("sldRecuperacion");
+  const sldLey = document.getElementById("sldLeyConc");
+
+  if (recNum >= P.recExig) {
+    badgeRec.textContent = "OK"; badgeRec.className = "status-badge status-ok";
+    sldRec.className = "ok";
+  } else {
+    badgeRec.textContent = "BAJO"; badgeRec.className = "status-badge status-low";
+    sldRec.className = "low";
+  }
+  if (leyNum >= P.leyExig) {
+    badgeLey.textContent = "OK"; badgeLey.className = "status-badge status-ok";
+    sldLey.className = "ok";
+  } else {
+    badgeLey.textContent = "BAJO"; badgeLey.className = "status-badge status-low";
+    sldLey.className = "low";
+  }
+
+  // Intermedios
+  document.getElementById("rFinos").textContent = fmt(finos) + " TMF";
+  document.getElementById("rPeso").textContent  = Math.round(peso).toLocaleString("es-CL") + " TMS";
+
+  // Tabla
+  document.getElementById("tRealFinos").textContent = fmt(finos);
+  document.getElementById("tExigFinos").textContent = fmt(finosE);
+  setDiff("tDiffFinos", finos - finosE, 2);
+
+  document.getElementById("tRealPeso").textContent = Math.round(peso).toLocaleString("es-CL");
+  document.getElementById("tExigPeso").textContent = Math.round(pesoE).toLocaleString("es-CL");
+  setDiff("tDiffPeso", peso - pesoE, 0);
+
+  document.getElementById("tRealValor").textContent = fmtUSD(valor);
+  document.getElementById("tExigValor").textContent = fmtUSD(valorE);
+  setDiff("tDiffValor", delta, 0, true);
+
+  // Big value
+  document.getElementById("bigValor").textContent = fmtUSD(valor);
+  const bd = document.getElementById("bigDelta");
+  bd.textContent = (delta >= 0 ? "+ " : "- ") + "USD " + Math.abs(Math.round(delta)).toLocaleString("es-CL") + " vs exig.";
+  bd.className = "bvdelta " + (delta >= 0 ? "pos" : "neg");
+}
+
+function setDiff(id, val, dec, usd=false) {
+  const el = document.getElementById(id);
+  const txt = usd
+    ? (val >= 0 ? "+ " : "- ") + "USD " + Math.abs(Math.round(val)).toLocaleString("es-CL")
+    : fmtDiff(val, dec);
+  el.textContent = txt;
+  el.className = val >= 0 ? "diff-pos" : "diff-neg";
+}
+
+function desdeSlider(campo) {
+  const ids = {
+    tonelaje:     ["sldTonelaje",    "txtTonelaje",    v => Math.round(v).toLocaleString("es-CL")],
+    precio:       ["sldPrecio",      "txtPrecio",      v => fmt(v, 1)],
+    leyCabeza:    ["sldLeyCabeza",   "txtLeyCabeza",   v => fmt(v, 2)],
+    recuperacion: ["sldRecuperacion","txtRecuperacion",v => fmt(v, 2)],
+    leyConc:      ["sldLeyConc",     "txtLeyConc",     v => fmt(v, 2)],
+  };
+  const [sldId, txtId, fmtFn] = ids[campo];
+  const sld = document.getElementById(sldId);
+  document.getElementById(txtId).value = fmtFn(parseFloat(sld.value));
+  updateSliderTrack(sld);
+  calcular();
+}
+
+function desdeTexto(campo) {
+  const map = {
+    tonelaje:     ["sldTonelaje",    "txtTonelaje",    10000, 100000, v => v],
+    precio:       ["sldPrecio",      "txtPrecio",      200,   800,    v => v],
+    leyCabeza:    ["sldLeyCabeza",   "txtLeyCabeza",   0.5,   3.0,    v => v],
+    recuperacion: ["sldRecuperacion","txtRecuperacion",80,    99,     v => v],
+    leyConc:      ["sldLeyConc",     "txtLeyConc",     10,    40,     v => v],
+  };
+  const [sldId, txtId, mn, mx] = map[campo];
+  let v = parseFloat(document.getElementById(txtId).value.replace(/\./g,"").replace(",","."));
+  if (isNaN(v)) return;
+  v = Math.max(mn, Math.min(mx, v));
+  const sld = document.getElementById(sldId);
+  sld.value = v;
+  updateSliderTrack(sld);
+  calcular();
+}
+
+// PIN
+function abrirPIN() {
+  document.getElementById("pinModal").classList.add("show");
+  document.getElementById("pinInput").value = "";
+  document.getElementById("pinError").style.display = "none";
+  setTimeout(() => document.getElementById("pinInput").focus(), 100);
+}
+function cerrarPIN() {
+  document.getElementById("pinModal").classList.remove("show");
+}
+function verificarPIN() {
+  const val = document.getElementById("pinInput").value;
+  if (val === PIN) {
+    cerrarPIN();
+    document.getElementById("paramsPanel").classList.add("show");
+    document.getElementById("pRefino").value = P.refino;
+    document.getElementById("pDescuento").value = P.descuento;
+    document.getElementById("pFusion").value = P.fusion;
+    document.getElementById("pFactor").value = P.factor;
+    document.getElementById("pRecExig").value = P.recExig;
+    document.getElementById("pLeyExig").value = P.leyExig;
+  } else {
+    document.getElementById("pinError").style.display = "block";
+    document.getElementById("pinInput").value = "";
+    document.getElementById("pinInput").focus();
+  }
+}
+function cerrarParams() {
+  document.getElementById("paramsPanel").classList.remove("show");
+}
+function guardarParams() {
+  P.refino    = parseFloat(document.getElementById("pRefino").value);
+  P.descuento = parseFloat(document.getElementById("pDescuento").value);
+  P.fusion    = parseFloat(document.getElementById("pFusion").value);
+  P.factor    = parseFloat(document.getElementById("pFactor").value);
+  P.recExig   = parseFloat(document.getElementById("pRecExig").value);
+  P.leyExig   = parseFloat(document.getElementById("pLeyExig").value);
+  // Update chips
+  document.getElementById("chipRefino").textContent   = P.refino;
+  document.getElementById("chipDescuento").textContent = P.descuento;
+  document.getElementById("chipFusion").textContent   = P.fusion;
+  document.getElementById("chipFactor").textContent   = P.factor.toFixed(3);
+  document.getElementById("chipRecExig").textContent  = P.recExig;
+  document.getElementById("chipLeyExig").textContent  = P.leyExig;
+  cerrarParams();
+  calcular();
+}
+
+// Init
+document.querySelectorAll("input[type=range]").forEach(updateSliderTrack);
+calcular();
+</script>
+</body>
+</html>
