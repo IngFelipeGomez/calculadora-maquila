@@ -2,576 +2,366 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Calculadora Maquila — Planta Delta</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --teal-dark: #0a4a38;
-    --teal-mid: #0f6e56;
-    --teal-light: #1d9e75;
-    --teal-pale: #e1f5ee;
-    --teal-xpale: #f0faf6;
-    --blue-dark: #0c447c;
-    --blue-mid: #185fa5;
-    --blue-pale: #e6f1fb;
-    --amber-dark: #633806;
-    --amber-mid: #ba7517;
-    --amber-pale: #faeeda;
-    --red-mid: #a32d2d;
-    --red-pale: #fcebeb;
-    --gray-900: #1a1a1a;
-    --gray-700: #3d3d3d;
-    --gray-500: #6b6b6b;
-    --gray-300: #d0d0d0;
-    --gray-100: #f5f5f5;
-    --white: #ffffff;
-    --radius: 10px;
-    --radius-sm: 6px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: "DM Sans", sans-serif;
-    background: #f2f4f3;
-    min-height: 100vh;
-    color: var(--gray-900);
-  }
+:root {
+  --teal-dark:#0a4a38;--teal-mid:#0f6e56;--teal-light:#1d9e75;--teal-pale:#e1f5ee;--teal-xpale:#f0faf6;
+  --blue-dark:#0c447c;--blue-mid:#185fa5;--blue-pale:#e6f1fb;
+  --amber-dark:#633806;--amber-mid:#ba7517;--amber-pale:#faeeda;
+  --purple-dark:#3c3489;--purple-mid:#534ab7;--purple-pale:#eeedfe;
+  --red-mid:#a32d2d;--red-pale:#fcebeb;
+  --gray-900:#1a1a1a;--gray-700:#3d3d3d;--gray-500:#6b6b6b;--gray-300:#d0d0d0;--gray-100:#f5f5f5;--white:#fff;
+  --radius:10px;--radius-sm:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:"DM Sans",sans-serif;background:#f2f4f3;min-height:100vh;color:var(--gray-900);}
 
-  /* ── HEADER ── */
-  header {
-    background: var(--teal-dark);
-    padding: 0 32px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  header .logo {
-    font-family: "DM Mono", monospace;
-    font-size: 13px;
-    color: var(--teal-light);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-  header .title {
-    font-size: 14px;
-    font-weight: 500;
-    color: rgba(255,255,255,0.9);
-  }
-  header .params-btn {
-    font-size: 12px;
-    color: rgba(255,255,255,0.6);
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    border-radius: 20px;
-    padding: 5px 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: "DM Sans", sans-serif;
-  }
-  header .params-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+/* ── LOGIN SCREEN ── */
+#loginScreen{position:fixed;inset:0;background:var(--teal-dark);display:flex;align-items:center;justify-content:center;z-index:999;}
+#loginScreen.hidden{display:none;}
+.login-box{background:var(--white);border-radius:16px;padding:36px 32px;width:320px;text-align:center;}
+.login-logo{font-family:"DM Mono",monospace;font-size:11px;color:var(--teal-mid);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px;}
+.login-title{font-size:20px;font-weight:600;color:var(--gray-900);margin-bottom:6px;}
+.login-sub{font-size:13px;color:var(--gray-500);margin-bottom:24px;}
+.login-box input[type=password]{
+  width:100%;padding:12px 16px;border:1px solid var(--gray-300);border-radius:var(--radius-sm);
+  font-size:20px;text-align:center;letter-spacing:0.4em;font-family:"DM Mono",monospace;
+  margin-bottom:10px;outline:none;transition:border-color 0.2s;
+}
+.login-box input[type=password]:focus{border-color:var(--teal-light);}
+.login-error{font-size:12px;color:var(--red-mid);margin-bottom:10px;min-height:18px;}
+.login-btn{width:100%;padding:12px;background:var(--teal-mid);color:#fff;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:500;cursor:pointer;font-family:"DM Sans",sans-serif;transition:background 0.2s;}
+.login-btn:hover{background:var(--teal-dark);}
 
-  /* ── PARAMS BAR ── */
-  .params-bar {
-    background: var(--teal-mid);
-    padding: 8px 32px;
-    display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-  .param-chip {
-    font-size: 11px;
-    color: rgba(255,255,255,0.75);
-    font-family: "DM Mono", monospace;
-  }
-  .param-chip span { color: #fff; font-weight: 500; }
+/* ── HEADER ── */
+header{background:var(--teal-dark);padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:"DM Mono",monospace;font-size:12px;color:var(--teal-light);letter-spacing:0.08em;text-transform:uppercase;}
+.header-title{font-size:13px;font-weight:500;color:rgba(255,255,255,0.9);}
+.params-btn{font-size:11px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:5px 12px;cursor:pointer;transition:all 0.2s;font-family:"DM Sans",sans-serif;}
+.params-btn:hover{background:rgba(255,255,255,0.15);color:#fff;}
 
-  /* ── MAIN LAYOUT ── */
-  main {
-    max-width: 900px;
-    margin: 28px auto;
-    padding: 0 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
+/* ── PARAMS BAR ── */
+.params-bar{background:var(--teal-mid);padding:6px 20px;display:flex;gap:16px;flex-wrap:wrap;overflow-x:auto;}
+.param-chip{font-size:10px;color:rgba(255,255,255,0.75);font-family:"DM Mono",monospace;white-space:nowrap;}
+.param-chip span{color:#fff;font-weight:500;}
 
-  /* ── CARDS ── */
-  .card {
-    background: var(--white);
-    border-radius: var(--radius);
-    border: 1px solid #e8e8e8;
-    overflow: hidden;
-  }
-  .card-header {
-    padding: 12px 18px;
-    border-bottom: 1px solid #f0f0f0;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .card-header .dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--teal-light);
-    flex-shrink: 0;
-  }
-  .card-header h2 {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: var(--gray-500);
-  }
-  .card-body { padding: 16px 18px; }
+/* ── MAIN ── */
+main{max-width:1050px;margin:20px auto;padding:0 14px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+@media(max-width:768px){main{grid-template-columns:1fr 1fr;gap:10px;margin:12px auto;padding:0 10px;}}
+@media(max-width:500px){main{grid-template-columns:1fr;gap:10px;}}
 
-  /* ── SLIDER ROWS ── */
-  .slider-row {
-    margin-bottom: 14px;
-  }
-  .slider-row:last-child { margin-bottom: 0; }
-  .slider-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 6px;
-  }
-  .slider-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--gray-700);
-  }
-  .slider-input-wrap {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .slider-input-wrap input[type="text"] {
-    width: 72px;
-    padding: 3px 7px;
-    font-size: 12px;
-    font-family: "DM Mono", monospace;
-    border: 1px solid var(--gray-300);
-    border-radius: var(--radius-sm);
-    text-align: right;
-    color: var(--gray-900);
-    background: var(--gray-100);
-    transition: border-color 0.2s;
-  }
-  .slider-input-wrap input[type="text"]:focus {
-    outline: none;
-    border-color: var(--teal-light);
-    background: var(--teal-xpale);
-  }
-  .slider-unit {
-    font-size: 11px;
-    color: var(--gray-500);
-    min-width: 44px;
-  }
-  .status-badge {
-    font-size: 10px;
-    font-weight: 600;
-    padding: 2px 7px;
-    border-radius: 20px;
-    font-family: "DM Mono", monospace;
-  }
-  .status-ok { background: var(--teal-pale); color: var(--teal-mid); }
-  .status-low { background: var(--red-pale); color: var(--red-mid); }
+/* ── CARDS ── */
+.card{background:var(--white);border-radius:var(--radius);border:1px solid #e8e8e8;overflow:hidden;}
+.card-header{padding:10px 14px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:8px;}
+.card-header .dot{width:7px;height:7px;border-radius:50%;background:var(--teal-light);flex-shrink:0;}
+.card-header h2{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray-500);}
+.card-body{padding:12px 14px;}
 
-  input[type="range"] {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 4px;
-    border-radius: 2px;
-    background: var(--gray-300);
-    outline: none;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  input[type="range"].ok { background: linear-gradient(to right, var(--teal-light) var(--pct, 50%), var(--gray-300) var(--pct, 50%)); }
-  input[type="range"].low { background: linear-gradient(to right, #e24b4a var(--pct, 50%), var(--gray-300) var(--pct, 50%)); }
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 16px; height: 16px;
-    border-radius: 50%;
-    background: var(--white);
-    border: 2px solid var(--teal-light);
-    cursor: pointer;
-    transition: border-color 0.2s, transform 0.1s;
-  }
-  input[type="range"].low::-webkit-slider-thumb { border-color: #e24b4a; }
-  input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+/* ── SLIDERS ── */
+.slider-row{margin-bottom:12px;}
+.slider-row:last-child{margin-bottom:0;}
+.slider-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;gap:6px;}
+.slider-label{font-size:11px;font-weight:500;color:var(--gray-700);white-space:nowrap;}
+.slider-right{display:flex;align-items:center;gap:4px;flex-shrink:0;}
+.slider-right input[type=text]{
+  width:62px;padding:3px 5px;font-size:11px;font-family:"DM Mono",monospace;
+  border:1px solid var(--gray-300);border-radius:var(--radius-sm);text-align:right;
+  color:var(--gray-900);background:var(--gray-100);transition:border-color 0.2s;
+}
+.slider-right input[type=text]:focus{outline:none;border-color:var(--teal-light);background:var(--teal-xpale);}
+.slider-unit{font-size:10px;color:var(--gray-500);min-width:28px;}
+.status-badge{font-size:9px;font-weight:600;padding:2px 5px;border-radius:20px;font-family:"DM Mono",monospace;}
+.status-ok{background:var(--teal-pale);color:var(--teal-mid);}
+.status-low{background:var(--red-pale);color:var(--red-mid);}
 
-  /* ── RESULTS SECTION ── */
-  .results-card { grid-column: 1 / -1; }
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:2px;background:var(--gray-300);outline:none;cursor:pointer;}
+input[type=range].ok{background:linear-gradient(to right,var(--teal-light) var(--pct,50%),var(--gray-300) var(--pct,50%));}
+input[type=range].low{background:linear-gradient(to right,#e24b4a var(--pct,50%),var(--gray-300) var(--pct,50%));}
+input[type=range].gold{background:linear-gradient(to right,var(--amber-mid) var(--pct,50%),var(--gray-300) var(--pct,50%));}
+input[type=range].silver{background:linear-gradient(to right,var(--purple-mid) var(--pct,50%),var(--gray-300) var(--pct,50%));}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--white);border:2px solid var(--teal-light);cursor:pointer;transition:border-color 0.2s,transform 0.1s;}
+input[type=range].low::-webkit-slider-thumb{border-color:#e24b4a;}
+input[type=range].gold::-webkit-slider-thumb{border-color:var(--amber-mid);}
+input[type=range].silver::-webkit-slider-thumb{border-color:var(--purple-mid);}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 
-  .intermedios {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-  .inter-item {
-    background: var(--gray-100);
-    border-radius: var(--radius-sm);
-    padding: 10px 14px;
-  }
-  .inter-item .ilabel {
-    font-size: 11px;
-    color: var(--gray-500);
-    margin-bottom: 3px;
-  }
-  .inter-item .ivalue {
-    font-size: 15px;
-    font-weight: 500;
-    font-family: "DM Mono", monospace;
-    color: var(--gray-900);
-  }
+/* ── SPAN ── */
+.span2{grid-column:span 2;}
+.span3{grid-column:1/-1;}
+@media(max-width:768px){.span2{grid-column:span 2;}.span3{grid-column:1/-1;}}
+@media(max-width:500px){.span2{grid-column:1/-1;}.span3{grid-column:1/-1;}}
 
-  /* ── COMPARISON TABLE ── */
-  .comp-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-  }
-  .comp-table th {
-    padding: 8px 12px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    text-align: right;
-    border-bottom: 1px solid #f0f0f0;
-  }
-  .comp-table th:first-child { text-align: left; color: var(--gray-500); }
-  .comp-table th.col-real { color: var(--blue-mid); background: var(--blue-pale); border-radius: 6px 6px 0 0; }
-  .comp-table th.col-exig { color: var(--amber-dark); background: var(--amber-pale); border-radius: 6px 6px 0 0; }
-  .comp-table th.col-diff { color: var(--gray-700); }
-  .comp-table td {
-    padding: 9px 12px;
-    text-align: right;
-    border-bottom: 1px solid #f8f8f8;
-    font-family: "DM Mono", monospace;
-    font-size: 12px;
-  }
-  .comp-table td:first-child {
-    text-align: left;
-    font-family: "DM Sans", sans-serif;
-    font-size: 12px;
-    color: var(--gray-700);
-    font-weight: 500;
-  }
-  .comp-table td.col-real { background: var(--blue-pale); color: var(--blue-dark); }
-  .comp-table td.col-exig { background: var(--amber-pale); color: var(--amber-dark); }
-  .comp-table tr.total td {
-    font-weight: 600;
-    font-size: 13px;
-    border-top: 2px solid #f0f0f0;
-    padding-top: 12px;
-  }
-  .diff-pos { color: var(--teal-mid); }
-  .diff-neg { color: var(--red-mid); }
+/* ── INTER GRID ── */
+.inter-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.inter-item{background:var(--gray-100);border-radius:var(--radius-sm);padding:7px 10px;}
+.inter-item .ilabel{font-size:10px;color:var(--gray-500);margin-bottom:2px;}
+.inter-item .ivalue{font-size:12px;font-weight:500;font-family:"DM Mono",monospace;color:var(--gray-900);}
 
-  /* ── BIG VALUE ── */
-  .big-value-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: var(--teal-dark);
-    border-radius: var(--radius-sm);
-    padding: 14px 18px;
-    margin-top: 16px;
-  }
-  .big-value-row .bvlabel {
-    font-size: 12px;
-    color: rgba(255,255,255,0.6);
-  }
-  .big-value-row .bvvalue {
-    font-size: 26px;
-    font-weight: 500;
-    color: #fff;
-    font-family: "DM Mono", monospace;
-  }
-  .big-value-row .bvdelta {
-    font-size: 13px;
-    font-family: "DM Mono", monospace;
-    padding: 4px 10px;
-    border-radius: 20px;
-  }
-  .bvdelta.pos { background: rgba(29,158,117,0.25); color: #5dcaa5; }
-  .bvdelta.neg { background: rgba(226,75,74,0.25); color: #f09595; }
+/* ── MARGEN TABLE ── */
+.margen-table{width:100%;border-collapse:collapse;font-size:12px;}
+.margen-table th{padding:7px 10px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;text-align:right;border-bottom:1px solid #f0f0f0;}
+.margen-table th:first-child{text-align:left;color:var(--gray-500);}
+.margen-table th.col-real{color:var(--blue-mid);background:var(--blue-pale);border-radius:5px 5px 0 0;}
+.margen-table th.col-exig{color:var(--amber-dark);background:var(--amber-pale);border-radius:5px 5px 0 0;}
+.margen-table td{padding:8px 10px;text-align:right;border-bottom:1px solid #f8f8f8;font-family:"DM Mono",monospace;font-size:11px;}
+.margen-table td:first-child{text-align:left;font-family:"DM Sans",sans-serif;font-size:11px;color:var(--gray-700);font-weight:500;}
+.margen-table td.col-real{background:var(--blue-pale);color:var(--blue-dark);}
+.margen-table td.col-exig{background:var(--amber-pale);color:var(--amber-dark);}
+.margen-table tr.metal-gold td:first-child{color:var(--amber-dark);}
+.margen-table tr.metal-silver td:first-child{color:var(--purple-dark);}
+.margen-table tr.metal-copper td:first-child{color:var(--teal-mid);}
+.margen-table tr.total-row td{font-weight:600;font-size:12px;border-top:2px solid #e8e8e8;background:var(--gray-100);padding-top:10px;}
+.margen-table tr.total-row td.col-real{background:#d4e9f7;color:var(--blue-dark);}
+.margen-table tr.total-row td.col-exig{background:#f5ddb0;color:var(--amber-dark);}
+.diff-pos{color:var(--teal-mid);}
+.diff-neg{color:var(--red-mid);}
 
-  /* ── PIN MODAL ── */
-  .modal-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 100;
-    align-items: center;
-    justify-content: center;
-  }
-  .modal-overlay.show { display: flex; }
-  .modal {
-    background: var(--white);
-    border-radius: var(--radius);
-    padding: 28px;
-    width: 320px;
-    border: 1px solid #e8e8e8;
-  }
-  .modal h3 {
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: var(--gray-900);
-  }
-  .modal p {
-    font-size: 12px;
-    color: var(--gray-500);
-    margin-bottom: 18px;
-  }
-  .modal input[type="password"] {
-    width: 100%;
-    padding: 10px 14px;
-    border: 1px solid var(--gray-300);
-    border-radius: var(--radius-sm);
-    font-size: 18px;
-    text-align: center;
-    letter-spacing: 0.3em;
-    font-family: "DM Mono", monospace;
-    margin-bottom: 12px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .modal input[type="password"]:focus { border-color: var(--teal-light); }
-  .modal-error { font-size: 12px; color: var(--red-mid); margin-bottom: 10px; display: none; }
-  .modal-btns { display: flex; gap: 8px; }
-  .btn-cancel {
-    flex: 1; padding: 9px; border: 1px solid var(--gray-300);
-    border-radius: var(--radius-sm); background: var(--white);
-    font-size: 13px; cursor: pointer; font-family: "DM Sans", sans-serif;
-    color: var(--gray-700);
-  }
-  .btn-ok {
-    flex: 1; padding: 9px; border: none;
-    border-radius: var(--radius-sm); background: var(--teal-mid);
-    font-size: 13px; cursor: pointer; font-family: "DM Sans", sans-serif;
-    color: #fff; font-weight: 500;
-  }
+/* ── BIG CARDS ── */
+.big-margen{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px;}
+@media(max-width:500px){.big-margen{grid-template-columns:1fr;}}
+.bm-item{border-radius:var(--radius-sm);padding:11px 14px;}
+.bm-item .bmlabel{font-size:10px;margin-bottom:3px;}
+.bm-item .bmvalue{font-size:17px;font-weight:500;font-family:"DM Mono",monospace;}
+.bm-copper{background:var(--teal-pale);}
+.bm-copper .bmlabel{color:var(--teal-mid);}
+.bm-copper .bmvalue{color:var(--teal-dark);}
+.bm-gold{background:var(--amber-pale);}
+.bm-gold .bmlabel{color:var(--amber-mid);}
+.bm-gold .bmvalue{color:var(--amber-dark);}
+.bm-silver{background:var(--purple-pale);}
+.bm-silver .bmlabel{color:var(--purple-mid);}
+.bm-silver .bmvalue{color:var(--purple-dark);}
 
-  /* ── PARAMS PANEL ── */
-  .params-panel {
-    display: none;
-    grid-column: 1 / -1;
-    background: var(--white);
-    border-radius: var(--radius);
-    border: 1px solid #e8e8e8;
-    overflow: hidden;
-  }
-  .params-panel.show { display: block; }
-  .params-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    padding: 16px 18px;
-  }
-  .param-field label {
-    display: block;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--gray-500);
-    margin-bottom: 5px;
-  }
-  .param-field input {
-    width: 100%;
-    padding: 8px 10px;
-    border: 1px solid var(--gray-300);
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    font-family: "DM Mono", monospace;
-    color: var(--blue-mid);
-    background: var(--blue-pale);
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .param-field input:focus { border-color: var(--blue-mid); }
-  .params-footer {
-    padding: 12px 18px;
-    border-top: 1px solid #f0f0f0;
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-  }
-  .btn-save {
-    padding: 8px 20px; background: var(--teal-mid); color: #fff;
-    border: none; border-radius: var(--radius-sm); font-size: 13px;
-    cursor: pointer; font-family: "DM Sans", sans-serif; font-weight: 500;
-  }
-  .btn-close-params {
-    padding: 8px 20px; background: var(--white); color: var(--gray-700);
-    border: 1px solid var(--gray-300); border-radius: var(--radius-sm);
-    font-size: 13px; cursor: pointer; font-family: "DM Sans", sans-serif;
-  }
+.big-total{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;background:var(--teal-dark);border-radius:var(--radius-sm);padding:14px 18px;margin-top:10px;}
+.bt-label{font-size:11px;color:rgba(255,255,255,0.6);}
+.bt-name{font-size:13px;font-weight:600;color:#fff;}
+.bt-value{font-size:22px;font-weight:500;color:#fff;font-family:"DM Mono",monospace;}
+.bt-delta{font-size:11px;font-family:"DM Mono",monospace;padding:4px 10px;border-radius:20px;}
+.bt-delta.pos{background:rgba(29,158,117,0.25);color:#5dcaa5;}
+.bt-delta.neg{background:rgba(226,75,74,0.25);color:#f09595;}
+
+/* ── PIN MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:100;align-items:center;justify-content:center;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--white);border-radius:var(--radius);padding:24px;width:300px;border:1px solid #e8e8e8;}
+.modal h3{font-size:14px;font-weight:600;margin-bottom:5px;}
+.modal p{font-size:11px;color:var(--gray-500);margin-bottom:16px;}
+.modal input[type=password]{width:100%;padding:10px 14px;border:1px solid var(--gray-300);border-radius:var(--radius-sm);font-size:18px;text-align:center;letter-spacing:0.35em;font-family:"DM Mono",monospace;margin-bottom:10px;outline:none;transition:border-color 0.2s;}
+.modal input[type=password]:focus{border-color:var(--teal-light);}
+.modal-error{font-size:11px;color:var(--red-mid);margin-bottom:10px;display:none;}
+.modal-btns{display:flex;gap:8px;}
+.btn-cancel{flex:1;padding:8px;border:1px solid var(--gray-300);border-radius:var(--radius-sm);background:var(--white);font-size:12px;cursor:pointer;font-family:"DM Sans",sans-serif;color:var(--gray-700);}
+.btn-ok{flex:1;padding:8px;border:none;border-radius:var(--radius-sm);background:var(--teal-mid);font-size:12px;cursor:pointer;font-family:"DM Sans",sans-serif;color:#fff;font-weight:500;}
+
+/* ── PARAMS PANEL ── */
+.params-panel{display:none;grid-column:1/-1;background:var(--white);border-radius:var(--radius);border:1px solid #e8e8e8;overflow:hidden;}
+.params-panel.show{display:block;}
+.params-section{padding:12px 16px 0;}
+.params-section-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray-500);margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid #f0f0f0;}
+.params-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.params-grid-6{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px;}
+@media(max-width:768px){.params-grid{grid-template-columns:1fr 1fr;}.params-grid-6{grid-template-columns:1fr 1fr 1fr;}}
+@media(max-width:500px){.params-grid{grid-template-columns:1fr 1fr;}.params-grid-6{grid-template-columns:1fr 1fr;}}
+.param-field label{display:block;font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--gray-500);margin-bottom:3px;}
+.param-field input{width:100%;padding:6px 8px;border:1px solid var(--gray-300);border-radius:var(--radius-sm);font-size:11px;font-family:"DM Mono",monospace;color:var(--blue-mid);background:var(--blue-pale);outline:none;}
+.param-field input:focus{border-color:var(--blue-mid);}
+.params-footer{padding:10px 16px;border-top:1px solid #f0f0f0;display:flex;justify-content:flex-end;gap:8px;}
+.btn-save{padding:7px 18px;background:var(--teal-mid);color:#fff;border:none;border-radius:var(--radius-sm);font-size:12px;cursor:pointer;font-family:"DM Sans",sans-serif;font-weight:500;}
+.btn-close-p{padding:7px 18px;background:var(--white);color:var(--gray-700);border:1px solid var(--gray-300);border-radius:var(--radius-sm);font-size:12px;cursor:pointer;font-family:"DM Sans",sans-serif;}
+
+/* ── TABLE SCROLL MOBILE ── */
+.table-wrap{overflow-x:auto;}
 </style>
 </head>
 <body>
 
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">ENAMI · Planta Delta</div>
+    <div class="login-title">Calculadora Maquila</div>
+    <div class="login-sub">Ingresa la clave de acceso</div>
+    <input type="password" id="loginInput" maxlength="8" placeholder="• • • •" onkeydown="if(event.key==='Enter') verificarLogin()">
+    <div class="login-error" id="loginError">Clave incorrecta. Intenta nuevamente.</div>
+    <button class="login-btn" onclick="verificarLogin()">Ingresar</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none;">
+
 <header>
   <div class="logo">ENAMI · Planta Delta</div>
-  <div class="title">Calculadora Método Maquila</div>
+  <div class="header-title">Calculadora Método Maquila</div>
   <button class="params-btn" onclick="abrirPIN()">⚙ Parámetros</button>
 </header>
 
-<div class="params-bar" id="paramsBar">
-  <div class="param-chip">Refino: <span id="chipRefino">4.3</span> cUS$/lb</div>
-  <div class="param-chip">Descuento: <span id="chipDescuento">3.8</span>%</div>
-  <div class="param-chip">Fusión: US$<span id="chipFusion">43</span>/TMS</div>
-  <div class="param-chip">Factor: <span id="chipFactor">22.046</span></div>
-  <div class="param-chip">Rec. exig.: <span id="chipRecExig">90.98</span>%</div>
-  <div class="param-chip">Ley exig.: <span id="chipLeyExig">26.21</span>%</div>
+<div class="params-bar">
+  <div class="param-chip">Cu refino: <span id="cCuRefino">4.3</span> cUS$/lb</div>
+  <div class="param-chip">Desc.Cu: <span id="cCuDesc">3.8</span>%</div>
+  <div class="param-chip">Fusión: US$<span id="cFusion">43</span>/TMS</div>
+  <div class="param-chip">Au: US$<span id="cAuPrecio">4869.8</span>/oz</div>
+  <div class="param-chip">Ag: US$<span id="cAgPrecio">78.5</span>/oz</div>
+  <div class="param-chip">Rec.exig: <span id="cRecExig">90.98</span>%</div>
+  <div class="param-chip">Ley.exig: <span id="cLeyExig">26.21</span>%</div>
 </div>
 
 <main>
 
-  <!-- Panel parámetros (oculto) -->
-  <div class="params-panel" id="paramsPanel">
-    <div class="card-header" style="background:#f8f8f8;">
-      <div class="dot" style="background:var(--amber-mid)"></div>
-      <h2>Parámetros del contrato — Actualizar 1 vez al año</h2>
-    </div>
+<!-- Params panel -->
+<div class="params-panel" id="paramsPanel">
+  <div class="card-header" style="background:#f8f8f8;">
+    <div class="dot" style="background:var(--amber-mid)"></div>
+    <h2>Parámetros del contrato — Actualizar 1 vez al año</h2>
+  </div>
+  <div class="params-section">
+    <div class="params-section-title">Cobre</div>
     <div class="params-grid">
-      <div class="param-field">
-        <label>Cargo refino (cUS$/lb)</label>
-        <input type="number" id="pRefino" value="4.3" step="0.01">
-      </div>
-      <div class="param-field">
-        <label>Descuento metalúrgico (%)</label>
-        <input type="number" id="pDescuento" value="3.8" step="0.1">
-      </div>
-      <div class="param-field">
-        <label>Cargo fusión (US$/TMS)</label>
-        <input type="number" id="pFusion" value="43" step="0.5">
-      </div>
-      <div class="param-field">
-        <label>Factor conversión</label>
-        <input type="number" id="pFactor" value="22.046223" step="0.000001">
-      </div>
-      <div class="param-field">
-        <label>Recuperación exigida (%)</label>
-        <input type="number" id="pRecExig" value="90.98" step="0.01">
-      </div>
-      <div class="param-field">
-        <label>Ley concentrado exigida (%)</label>
-        <input type="number" id="pLeyExig" value="26.21" step="0.01">
-      </div>
+      <div class="param-field"><label>Cargo refino (cUS$/lb)</label><input type="number" id="pCuRefino" value="4.3" step="0.01"></div>
+      <div class="param-field"><label>Descuento met. (%)</label><input type="number" id="pCuDesc" value="3.8" step="0.1"></div>
+      <div class="param-field"><label>Cargo fusión (US$/TMS)</label><input type="number" id="pFusion" value="43" step="0.5"></div>
+      <div class="param-field"><label>Factor conversión</label><input type="number" id="pFactor" value="22.046223" step="0.000001"></div>
+      <div class="param-field"><label>Rec. exigida (%)</label><input type="number" id="pRecExig" value="90.98" step="0.01"></div>
+      <div class="param-field"><label>Ley conc. exigida (%)</label><input type="number" id="pLeyExig" value="26.21" step="0.01"></div>
     </div>
-    <div class="params-footer">
-      <button class="btn-close-params" onclick="cerrarParams()">Cancelar</button>
-      <button class="btn-save" onclick="guardarParams()">Guardar parámetros</button>
+    <div class="params-section-title">Oro</div>
+    <div class="params-grid-6">
+      <div class="param-field"><label>Precio (US$/oz)</label><input type="number" id="pAuPrecio" value="4869.786" step="1"></div>
+      <div class="param-field"><label>Cargo refino (US$/oz)</label><input type="number" id="pAuRefino" value="6.0" step="0.1"></div>
+      <div class="param-field"><label>Descuento met. (%)</label><input type="number" id="pAuDesc" value="4" step="0.1"></div>
+      <div class="param-field"><label>Factor conversión</label><input type="number" id="pAuFactor" value="31.10348" step="0.00001"></div>
+    </div>
+    <div class="params-section-title">Plata</div>
+    <div class="params-grid-6">
+      <div class="param-field"><label>Precio (US$/oz)</label><input type="number" id="pAgPrecio" value="78.496" step="0.1"></div>
+      <div class="param-field"><label>Cargo refino (US$/oz)</label><input type="number" id="pAgRefino" value="0.365" step="0.01"></div>
+      <div class="param-field"><label>Descuento met. (%)</label><input type="number" id="pAgDesc" value="4" step="0.1"></div>
+      <div class="param-field"><label>Factor conversión</label><input type="number" id="pAgFactor" value="31.10348" step="0.00001"></div>
     </div>
   </div>
+  <div class="params-footer">
+    <button class="btn-close-p" onclick="cerrarParams()">Cancelar</button>
+    <button class="btn-save" onclick="guardarParams()">Guardar parámetros</button>
+  </div>
+</div>
 
-  <!-- Card izq: Variables operacionales -->
-  <div class="card">
-    <div class="card-header">
-      <div class="dot"></div>
-      <h2>Variables operacionales</h2>
+<!-- Card 1: Variables operacionales -->
+<div class="card">
+  <div class="card-header"><div class="dot"></div><h2>Variables operacionales</h2></div>
+  <div class="card-body">
+    <div class="slider-row">
+      <div class="slider-meta">
+        <span class="slider-label">Tonelaje mineral</span>
+        <div class="slider-right"><input type="text" id="txtTonelaje" value="57.000" onchange="desdeTexto('tonelaje')"><span class="slider-unit">TMS</span></div>
+      </div>
+      <input type="range" id="sldTonelaje" min="10000" max="100000" step="500" value="57000" class="ok" oninput="desdeSlider('tonelaje')">
     </div>
-    <div class="card-body">
-
-      <div class="slider-row">
-        <div class="slider-meta">
-          <span class="slider-label">Tonelaje mineral</span>
-          <div class="slider-input-wrap">
-            <input type="text" id="txtTonelaje" value="57.000" onchange="desdeTexto('tonelaje')">
-            <span class="slider-unit">TMS</span>
-          </div>
-        </div>
-        <input type="range" id="sldTonelaje" min="10000" max="100000" step="500" value="57000" class="ok" oninput="desdeSlider('tonelaje')">
+    <div class="slider-row">
+      <div class="slider-meta">
+        <span class="slider-label">Precio cobre</span>
+        <div class="slider-right"><input type="text" id="txtPrecio" value="566.9" onchange="desdeTexto('precio')"><span class="slider-unit">cUS$/lb</span></div>
       </div>
-
-      <div class="slider-row">
-        <div class="slider-meta">
-          <span class="slider-label">Precio del cobre</span>
-          <div class="slider-input-wrap">
-            <input type="text" id="txtPrecio" value="566.9" onchange="desdeTexto('precio')">
-            <span class="slider-unit">cUS$/lb</span>
-          </div>
-        </div>
-        <input type="range" id="sldPrecio" min="200" max="800" step="1" value="567" class="ok" oninput="desdeSlider('precio')">
+      <input type="range" id="sldPrecio" min="200" max="800" step="1" value="567" class="ok" oninput="desdeSlider('precio')">
+    </div>
+    <div class="slider-row">
+      <div class="slider-meta">
+        <span class="slider-label">Ley cabeza Cu</span>
+        <div class="slider-right"><input type="text" id="txtLeyCabeza" value="1.20" onchange="desdeTexto('leyCabeza')"><span class="slider-unit">% Cu</span></div>
       </div>
-
-      <div class="slider-row">
-        <div class="slider-meta">
-          <span class="slider-label">Ley de cabeza</span>
-          <div class="slider-input-wrap">
-            <input type="text" id="txtLeyCabeza" value="1.20" onchange="desdeTexto('leyCabeza')">
-            <span class="slider-unit">% Cu</span>
-          </div>
-        </div>
-        <input type="range" id="sldLeyCabeza" min="0.5" max="3.0" step="0.01" value="1.20" class="ok" oninput="desdeSlider('leyCabeza')">
-      </div>
-
+      <input type="range" id="sldLeyCabeza" min="0.5" max="3.0" step="0.01" value="1.20" class="ok" oninput="desdeSlider('leyCabeza')">
     </div>
   </div>
+</div>
 
-  <!-- Card der: Variables metalúrgicas -->
-  <div class="card">
-    <div class="card-header">
-      <div class="dot"></div>
-      <h2>Variables metalúrgicas</h2>
+<!-- Card 2: Cobre -->
+<div class="card">
+  <div class="card-header"><div class="dot" style="background:var(--teal-light)"></div><h2>Cobre — recuperación y ley</h2></div>
+  <div class="card-body">
+    <div class="slider-row">
+      <div class="slider-meta">
+        <span class="slider-label">Recuperación Cu</span>
+        <div class="slider-right"><input type="text" id="txtRecuperacion" value="92.29" onchange="desdeTexto('recuperacion')"><span class="slider-unit">%</span><span class="status-badge status-ok" id="badgeRec">OK</span></div>
+      </div>
+      <input type="range" id="sldRecuperacion" min="80" max="99" step="0.01" value="92.29" class="ok" oninput="desdeSlider('recuperacion')">
     </div>
-    <div class="card-body">
-
-      <div class="slider-row">
-        <div class="slider-meta">
-          <span class="slider-label">Recuperación Cu</span>
-          <div class="slider-input-wrap">
-            <input type="text" id="txtRecuperacion" value="92.29" onchange="desdeTexto('recuperacion')">
-            <span class="slider-unit">%</span>
-            <span class="status-badge status-ok" id="badgeRec">OK</span>
-          </div>
-        </div>
-        <input type="range" id="sldRecuperacion" min="80" max="99" step="0.01" value="92.29" class="ok" oninput="desdeSlider('recuperacion')">
+    <div class="slider-row">
+      <div class="slider-meta">
+        <span class="slider-label">Ley concentrado Cu</span>
+        <div class="slider-right"><input type="text" id="txtLeyConc" value="18.56" onchange="desdeTexto('leyConc')"><span class="slider-unit">%</span><span class="status-badge status-low" id="badgeLey">BAJO</span></div>
       </div>
-
-      <div class="slider-row">
-        <div class="slider-meta">
-          <span class="slider-label">Ley concentrado</span>
-          <div class="slider-input-wrap">
-            <input type="text" id="txtLeyConc" value="18.56" onchange="desdeTexto('leyConc')">
-            <span class="slider-unit">%</span>
-            <span class="status-badge status-low" id="badgeLey">BAJO</span>
-          </div>
-        </div>
-        <input type="range" id="sldLeyConc" min="10" max="40" step="0.01" value="18.56" class="low" oninput="desdeSlider('leyConc')">
-      </div>
-
-      <div style="margin-top: 18px;">
-        <div class="intermedios">
-          <div class="inter-item">
-            <div class="ilabel">Finos Cu producidos</div>
-            <div class="ivalue" id="rFinos">—</div>
-          </div>
-          <div class="inter-item">
-            <div class="ilabel">Peso seco concentrado</div>
-            <div class="ivalue" id="rPeso">—</div>
-          </div>
-        </div>
-      </div>
-
+      <input type="range" id="sldLeyConc" min="10" max="40" step="0.01" value="18.56" class="low" oninput="desdeSlider('leyConc')">
+    </div>
+    <div class="inter-grid">
+      <div class="inter-item"><div class="ilabel">Finos Cu (TMF)</div><div class="ivalue" id="rFinosCu">—</div></div>
+      <div class="inter-item"><div class="ilabel">Peso seco conc.</div><div class="ivalue" id="rPesoCu">—</div></div>
     </div>
   </div>
+</div>
 
-  <!-- Card resultados full width -->
-  <div class="card results-card">
-    <div class="card-header">
-      <div class="dot" style="background:var(--amber-mid)"></div>
-      <h2>Comparativo de valorización</h2>
+<!-- Card 3: Oro y Plata -->
+<div class="card">
+  <div class="card-header"><div class="dot" style="background:var(--amber-mid)"></div><h2>Oro y plata</h2></div>
+  <div class="card-body">
+    <div class="slider-row">
+      <div class="slider-meta">
+        <span class="slider-label" style="color:var(--amber-dark)">Precio oro</span>
+        <div class="slider-right"><input type="text" id="txtAuPrecio" value="4869.8" onchange="desdeTexto('auPrecio')"><span class="slider-unit">US$/oz</span></div>
+      </div>
+      <input type="range" id="sldAuPrecio" min="1000" max="8000" step="10" value="4869" class="gold" oninput="desdeSlider('auPrecio')">
     </div>
-    <div class="card-body">
-      <table class="comp-table">
+    <div class="slider-row">
+      <div class="slider-meta">
+        <span class="slider-label" style="color:var(--amber-dark)">Ley cabeza Au</span>
+        <div class="slider-right"><input type="text" id="txtAuLey" value="0.81" onchange="desdeTexto('auLey')"><span class="slider-unit">g/t</span></div>
+      </div>
+      <input type="range" id="sldAuLey" min="0.1" max="5.0" step="0.01" value="0.81" class="gold" oninput="desdeSlider('auLey')">
+    </div>
+    <div class="slider-row">
+      <div class="slider-meta">
+        <span class="slider-label" style="color:var(--amber-dark)">Rec. oro</span>
+        <div class="slider-right"><input type="text" id="txtAuRec" value="63.47" onchange="desdeTexto('auRec')"><span class="slider-unit">%</span></div>
+      </div>
+      <input type="range" id="sldAuRec" min="40" max="90" step="0.01" value="63.47" class="gold" oninput="desdeSlider('auRec')">
+    </div>
+    <div class="slider-row" style="margin-top:10px;padding-top:10px;border-top:1px solid #f0f0f0;">
+      <div class="slider-meta">
+        <span class="slider-label" style="color:var(--purple-dark)">Precio plata</span>
+        <div class="slider-right"><input type="text" id="txtAgPrecio" value="78.5" onchange="desdeTexto('agPrecio')"><span class="slider-unit">US$/oz</span></div>
+      </div>
+      <input type="range" id="sldAgPrecio" min="10" max="200" step="0.5" value="78.5" class="silver" oninput="desdeSlider('agPrecio')">
+    </div>
+    <div class="slider-row">
+      <div class="slider-meta">
+        <span class="slider-label" style="color:var(--purple-dark)">Ley cabeza Ag</span>
+        <div class="slider-right"><input type="text" id="txtAgLey" value="2.42" onchange="desdeTexto('agLey')"><span class="slider-unit">g/t</span></div>
+      </div>
+      <input type="range" id="sldAgLey" min="0.1" max="20.0" step="0.01" value="2.42" class="silver" oninput="desdeSlider('agLey')">
+    </div>
+    <div class="slider-row">
+      <div class="slider-meta">
+        <span class="slider-label" style="color:var(--purple-dark)">Rec. plata</span>
+        <div class="slider-right"><input type="text" id="txtAgRec" value="373.54" onchange="desdeTexto('agRec')"><span class="slider-unit">%</span></div>
+      </div>
+      <input type="range" id="sldAgRec" min="200" max="600" step="0.1" value="373.54" class="silver" oninput="desdeSlider('agRec')">
+    </div>
+    <div class="inter-grid">
+      <div class="inter-item"><div class="ilabel">Finos Au (oz)</div><div class="ivalue" id="rFinosAu">—</div></div>
+      <div class="inter-item"><div class="ilabel">Finos Ag (oz)</div><div class="ivalue" id="rFinosAg">—</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Margen Metalúrgico -->
+<div class="card span3">
+  <div class="card-header">
+    <div class="dot" style="background:var(--amber-mid)"></div>
+    <h2>Margen Metalúrgico — Comparativo Real vs Exigencia</h2>
+  </div>
+  <div class="card-body">
+    <div class="table-wrap">
+      <table class="margen-table">
         <thead>
           <tr>
             <th></th>
@@ -581,46 +371,36 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Finos Cu (TMF)</td>
-            <td class="col-real" id="tRealFinos">—</td>
-            <td class="col-exig" id="tExigFinos">—</td>
-            <td id="tDiffFinos">—</td>
-          </tr>
-          <tr>
-            <td>Peso seco conc. (TMS)</td>
-            <td class="col-real" id="tRealPeso">—</td>
-            <td class="col-exig" id="tExigPeso">—</td>
-            <td id="tDiffPeso">—</td>
-          </tr>
-          <tr class="total">
-            <td>Valor concentrado (USD)</td>
-            <td class="col-real" id="tRealValor">—</td>
-            <td class="col-exig" id="tExigValor">—</td>
-            <td id="tDiffValor">—</td>
-          </tr>
+          <tr class="metal-copper"><td>Cobre (USD)</td><td class="col-real" id="tCuReal">—</td><td class="col-exig" id="tCuExig">—</td><td id="tCuDiff">—</td></tr>
+          <tr class="metal-gold"><td>Oro (USD)</td><td class="col-real" id="tAuReal">—</td><td class="col-exig" id="tAuExig">—</td><td id="tAuDiff">—</td></tr>
+          <tr class="metal-silver"><td>Plata (USD)</td><td class="col-real" id="tAgReal">—</td><td class="col-exig" id="tAgExig">—</td><td id="tAgDiff">—</td></tr>
+          <tr class="total-row"><td>Margen Metalúrgico Total</td><td class="col-real" id="tTotalReal">—</td><td class="col-exig" id="tTotalExig">—</td><td id="tTotalDiff">—</td></tr>
         </tbody>
       </table>
-
-      <div class="big-value-row">
-        <div>
-          <div class="bvlabel">Valor concentrado real</div>
-        </div>
-        <div class="bvvalue" id="bigValor">USD —</div>
-        <div class="bvdelta pos" id="bigDelta">—</div>
-      </div>
+    </div>
+    <div class="big-margen">
+      <div class="bm-item bm-copper"><div class="bmlabel">Valorización Cobre</div><div class="bmvalue" id="bmCu">USD —</div></div>
+      <div class="bm-item bm-gold"><div class="bmlabel">Valorización Oro</div><div class="bmvalue" id="bmAu">USD —</div></div>
+      <div class="bm-item bm-silver"><div class="bmlabel">Valorización Plata</div><div class="bmvalue" id="bmAg">USD —</div></div>
+    </div>
+    <div class="big-total">
+      <div><div class="bt-label">Resultado consolidado</div><div class="bt-name">Margen Metalúrgico</div></div>
+      <div class="bt-value" id="btTotal">USD —</div>
+      <div class="bt-delta pos" id="btDelta">—</div>
     </div>
   </div>
+</div>
 
 </main>
+</div>
 
-<!-- PIN Modal -->
+<!-- PIN Modal (parámetros) -->
 <div class="modal-overlay" id="pinModal">
   <div class="modal">
     <h3>Acceso a parámetros</h3>
     <p>Ingresa el PIN para editar los parámetros del contrato.</p>
     <input type="password" id="pinInput" maxlength="6" placeholder="• • • •" onkeydown="if(event.key==='Enter') verificarPIN()">
-    <div class="modal-error" id="pinError">PIN incorrecto. Intenta nuevamente.</div>
+    <div class="modal-error" id="pinError">PIN incorrecto.</div>
     <div class="modal-btns">
       <button class="btn-cancel" onclick="cerrarPIN()">Cancelar</button>
       <button class="btn-ok" onclick="verificarPIN()">Ingresar</button>
@@ -629,196 +409,180 @@
 </div>
 
 <script>
-const PIN = "Delta2026";
+const LOGIN_PASS = "delta2024";
+const PIN_PARAMS = "1234";
 
-// Parámetros (editables vía panel)
+// Parámetros
 let P = {
-  refino: 4.3,
-  descuento: 3.8,
-  fusion: 43,
-  factor: 22.046223,
-  recExig: 90.98,
-  leyExig: 26.21
+  cu:{ refino:4.3, descuento:3.8, fusion:43, factor:22.046223, recExig:90.98, leyExig:26.21 },
+  au:{ precio:4869.786, refino:6.0, descuento:4, ley:0.81, rec:63.47, factor:31.10348 },
+  ag:{ precio:78.496, refino:0.365, descuento:4, ley:2.42, rec:373.54, factor:31.10348 }
 };
 
-function fmt(n, dec=2) {
-  return Number(n).toLocaleString("es-CL", {minimumFractionDigits: dec, maximumFractionDigits: dec});
+// LOGIN
+function verificarLogin() {
+  const v = document.getElementById("loginInput").value;
+  if (v === LOGIN_PASS) {
+    document.getElementById("loginScreen").classList.add("hidden");
+    document.getElementById("app").style.display = "block";
+    calcular();
+  } else {
+    document.getElementById("loginError").style.display = "block";
+    document.getElementById("loginInput").value = "";
+    document.getElementById("loginInput").focus();
+  }
 }
-function fmtUSD(n) {
-  return "USD " + Math.round(n).toLocaleString("es-CL");
-}
-function fmtDiff(n, dec=2) {
-  const s = n >= 0 ? "+" : "";
-  return s + fmt(n, dec);
-}
+setTimeout(()=>document.getElementById("loginInput").focus(), 300);
 
-function updateSliderTrack(el) {
-  const min = parseFloat(el.min), max = parseFloat(el.max), val = parseFloat(el.value);
-  const pct = ((val - min) / (max - min) * 100).toFixed(1);
-  el.style.setProperty("--pct", pct + "%");
-}
+// UTILS
+function fmtN(n,d=2){ return Number(n).toLocaleString("es-CL",{minimumFractionDigits:d,maximumFractionDigits:d}); }
+function fmtUSD(n){ return "USD "+Math.round(n).toLocaleString("es-CL"); }
+function fmtShort(n){ return Math.round(n).toLocaleString("es-CL"); }
+function updateTrack(el){ const p=((parseFloat(el.value)-parseFloat(el.min))/(parseFloat(el.max)-parseFloat(el.min))*100).toFixed(1); el.style.setProperty("--pct",p+"%"); }
 
+// CALC
 function calcular() {
-  const tms    = parseFloat(document.getElementById("sldTonelaje").value);
-  const precio = parseFloat(document.getElementById("sldPrecio").value);
-  const leyC   = parseFloat(document.getElementById("sldLeyCabeza").value) / 100;
-  const rec    = parseFloat(document.getElementById("sldRecuperacion").value) / 100;
-  const leyConc = parseFloat(document.getElementById("sldLeyConc").value) / 100;
+  const tms     = parseFloat(document.getElementById("sldTonelaje").value);
+  const precio  = parseFloat(document.getElementById("sldPrecio").value);
+  const leyC    = parseFloat(document.getElementById("sldLeyCabeza").value)/100;
+  const rec     = parseFloat(document.getElementById("sldRecuperacion").value)/100;
+  const leyConc = parseFloat(document.getElementById("sldLeyConc").value)/100;
+  const auPrecio= parseFloat(document.getElementById("sldAuPrecio").value);
+  const auLey   = parseFloat(document.getElementById("sldAuLey").value);
+  const auRec   = parseFloat(document.getElementById("sldAuRec").value)/100;
+  const agPrecio= parseFloat(document.getElementById("sldAgPrecio").value);
+  const agLey   = parseFloat(document.getElementById("sldAgLey").value);
+  const agRec   = parseFloat(document.getElementById("sldAgRec").value)/100;
 
-  // Escenario real
-  const finos = tms * leyC * rec;
-  const peso  = finos / leyConc;
-  const valor = finos * (precio - P.refino) * P.factor * (1 - P.descuento/100) - peso * P.fusion;
+  // COBRE
+  const cuFinos  = tms*leyC*rec;
+  const cuPeso   = cuFinos/leyConc;
+  const cuValor  = cuFinos*(precio-P.cu.refino)*P.cu.factor*(1-P.cu.descuento/100)-cuPeso*P.cu.fusion;
+  const cuFinosE = tms*leyC*(P.cu.recExig/100);
+  const cuPesoE  = cuFinosE/(P.cu.leyExig/100);
+  const cuValorE = cuFinosE*(precio-P.cu.refino)*P.cu.factor*(1-P.cu.descuento/100)-cuPesoE*P.cu.fusion;
 
-  // Escenario exigencia
-  const recE  = P.recExig / 100;
-  const leyE  = P.leyExig / 100;
-  const finosE = tms * leyC * recE;
-  const pesoE  = finosE / leyE;
-  const valorE = finosE * (precio - P.refino) * P.factor * (1 - P.descuento/100) - pesoE * P.fusion;
+  // ORO: Finos(oz) = TMS * ley(g/t) / factor * rec
+  const auFinos  = tms*auLey/P.au.factor*auRec;
+  const auValor  = auFinos*(auPrecio-P.au.refino)/P.au.factor*1000*(1-P.au.descuento/100);
+  const auFinosE = tms*P.au.ley/P.au.factor*(P.au.rec/100);
+  const auValorE = auFinosE*(P.au.precio-P.au.refino)/P.au.factor*1000*(1-P.au.descuento/100);
 
-  const delta = valor - valorE;
+  // PLATA
+  const agFinos  = tms*agLey/P.ag.factor*agRec;
+  const agValor  = agFinos*(agPrecio-P.ag.refino)/P.ag.factor*1000*(1-P.ag.descuento/100);
+  const agFinosE = tms*P.ag.ley/P.ag.factor*(P.ag.rec/100);
+  const agValorE = agFinosE*(P.ag.precio-P.ag.refino)/P.ag.factor*1000*(1-P.ag.descuento/100);
 
-  // Badges
-  const recNum = parseFloat(document.getElementById("sldRecuperacion").value);
-  const leyNum = parseFloat(document.getElementById("sldLeyConc").value);
-  const badgeRec = document.getElementById("badgeRec");
-  const badgeLey = document.getElementById("badgeLey");
-  const sldRec = document.getElementById("sldRecuperacion");
-  const sldLey = document.getElementById("sldLeyConc");
+  const totalReal=cuValor+auValor+agValor;
+  const totalExig=cuValorE+auValorE+agValorE;
+  const delta=totalReal-totalExig;
 
-  if (recNum >= P.recExig) {
-    badgeRec.textContent = "OK"; badgeRec.className = "status-badge status-ok";
-    sldRec.className = "ok";
-  } else {
-    badgeRec.textContent = "BAJO"; badgeRec.className = "status-badge status-low";
-    sldRec.className = "low";
-  }
-  if (leyNum >= P.leyExig) {
-    badgeLey.textContent = "OK"; badgeLey.className = "status-badge status-ok";
-    sldLey.className = "ok";
-  } else {
-    badgeLey.textContent = "BAJO"; badgeLey.className = "status-badge status-low";
-    sldLey.className = "low";
-  }
+  // Badges Cu
+  const recNum=parseFloat(document.getElementById("sldRecuperacion").value);
+  const leyNum=parseFloat(document.getElementById("sldLeyConc").value);
+  const bRec=document.getElementById("badgeRec"),sRec=document.getElementById("sldRecuperacion");
+  const bLey=document.getElementById("badgeLey"),sLey=document.getElementById("sldLeyConc");
+  if(recNum>=P.cu.recExig){bRec.textContent="OK";bRec.className="status-badge status-ok";sRec.className="ok";}
+  else{bRec.textContent="BAJO";bRec.className="status-badge status-low";sRec.className="low";}
+  if(leyNum>=P.cu.leyExig){bLey.textContent="OK";bLey.className="status-badge status-ok";sLey.className="ok";}
+  else{bLey.textContent="BAJO";bLey.className="status-badge status-low";sLey.className="low";}
 
   // Intermedios
-  document.getElementById("rFinos").textContent = fmt(finos) + " TMF";
-  document.getElementById("rPeso").textContent  = Math.round(peso).toLocaleString("es-CL") + " TMS";
+  document.getElementById("rFinosCu").textContent=fmtN(cuFinos)+" TMF";
+  document.getElementById("rPesoCu").textContent=Math.round(cuPeso).toLocaleString("es-CL")+" TMS";
+  document.getElementById("rFinosAu").textContent=fmtN(auFinos,4)+" oz";
+  document.getElementById("rFinosAg").textContent=fmtN(agFinos,2)+" oz";
 
   // Tabla
-  document.getElementById("tRealFinos").textContent = fmt(finos);
-  document.getElementById("tExigFinos").textContent = fmt(finosE);
-  setDiff("tDiffFinos", finos - finosE, 2);
+  setCell("tCuReal",fmtShort(cuValor));setCell("tCuExig",fmtShort(cuValorE));setDiff("tCuDiff",cuValor-cuValorE);
+  setCell("tAuReal",fmtShort(auValor));setCell("tAuExig",fmtShort(auValorE));setDiff("tAuDiff",auValor-auValorE);
+  setCell("tAgReal",fmtShort(agValor));setCell("tAgExig",fmtShort(agValorE));setDiff("tAgDiff",agValor-agValorE);
+  setCell("tTotalReal",fmtShort(totalReal));setCell("tTotalExig",fmtShort(totalExig));setDiff("tTotalDiff",delta);
 
-  document.getElementById("tRealPeso").textContent = Math.round(peso).toLocaleString("es-CL");
-  document.getElementById("tExigPeso").textContent = Math.round(pesoE).toLocaleString("es-CL");
-  setDiff("tDiffPeso", peso - pesoE, 0);
-
-  document.getElementById("tRealValor").textContent = fmtUSD(valor);
-  document.getElementById("tExigValor").textContent = fmtUSD(valorE);
-  setDiff("tDiffValor", delta, 0, true);
-
-  // Big value
-  document.getElementById("bigValor").textContent = fmtUSD(valor);
-  const bd = document.getElementById("bigDelta");
-  bd.textContent = (delta >= 0 ? "+ " : "- ") + "USD " + Math.abs(Math.round(delta)).toLocaleString("es-CL") + " vs exig.";
-  bd.className = "bvdelta " + (delta >= 0 ? "pos" : "neg");
+  // Big
+  document.getElementById("bmCu").textContent=fmtUSD(cuValor);
+  document.getElementById("bmAu").textContent=fmtUSD(auValor);
+  document.getElementById("bmAg").textContent=fmtUSD(agValor);
+  document.getElementById("btTotal").textContent=fmtUSD(totalReal);
+  const bd=document.getElementById("btDelta");
+  bd.textContent=(delta>=0?"+ ":"- ")+"USD "+Math.abs(Math.round(delta)).toLocaleString("es-CL")+" vs exig.";
+  bd.className="bt-delta "+(delta>=0?"pos":"neg");
 }
 
-function setDiff(id, val, dec, usd=false) {
-  const el = document.getElementById(id);
-  const txt = usd
-    ? (val >= 0 ? "+ " : "- ") + "USD " + Math.abs(Math.round(val)).toLocaleString("es-CL")
-    : fmtDiff(val, dec);
-  el.textContent = txt;
-  el.className = val >= 0 ? "diff-pos" : "diff-neg";
+function setCell(id,v){document.getElementById(id).textContent=v;}
+function setDiff(id,v){
+  const el=document.getElementById(id);
+  el.textContent=(v>=0?"+ ":"- ")+Math.abs(Math.round(v)).toLocaleString("es-CL");
+  el.className=v>=0?"diff-pos":"diff-neg";
 }
 
-function desdeSlider(campo) {
-  const ids = {
-    tonelaje:     ["sldTonelaje",    "txtTonelaje",    v => Math.round(v).toLocaleString("es-CL")],
-    precio:       ["sldPrecio",      "txtPrecio",      v => fmt(v, 1)],
-    leyCabeza:    ["sldLeyCabeza",   "txtLeyCabeza",   v => fmt(v, 2)],
-    recuperacion: ["sldRecuperacion","txtRecuperacion",v => fmt(v, 2)],
-    leyConc:      ["sldLeyConc",     "txtLeyConc",     v => fmt(v, 2)],
-  };
-  const [sldId, txtId, fmtFn] = ids[campo];
-  const sld = document.getElementById(sldId);
-  document.getElementById(txtId).value = fmtFn(parseFloat(sld.value));
-  updateSliderTrack(sld);
-  calcular();
+// SLIDERS CONFIG
+const SLIDERS={
+  tonelaje:    {sld:"sldTonelaje",    txt:"txtTonelaje",    mn:10000,mx:100000,fmt:v=>Math.round(v).toLocaleString("es-CL")},
+  precio:      {sld:"sldPrecio",      txt:"txtPrecio",      mn:200,  mx:800,   fmt:v=>fmtN(v,1)},
+  leyCabeza:   {sld:"sldLeyCabeza",   txt:"txtLeyCabeza",   mn:0.5,  mx:3.0,   fmt:v=>fmtN(v,2)},
+  recuperacion:{sld:"sldRecuperacion",txt:"txtRecuperacion",mn:80,   mx:99,    fmt:v=>fmtN(v,2)},
+  leyConc:     {sld:"sldLeyConc",     txt:"txtLeyConc",     mn:10,   mx:40,    fmt:v=>fmtN(v,2)},
+  auPrecio:    {sld:"sldAuPrecio",    txt:"txtAuPrecio",    mn:1000, mx:8000,  fmt:v=>fmtN(v,1)},
+  auLey:       {sld:"sldAuLey",       txt:"txtAuLey",       mn:0.1,  mx:5.0,   fmt:v=>fmtN(v,2)},
+  auRec:       {sld:"sldAuRec",       txt:"txtAuRec",       mn:40,   mx:90,    fmt:v=>fmtN(v,2)},
+  agPrecio:    {sld:"sldAgPrecio",    txt:"txtAgPrecio",    mn:10,   mx:200,   fmt:v=>fmtN(v,1)},
+  agLey:       {sld:"sldAgLey",       txt:"txtAgLey",       mn:0.1,  mx:20.0,  fmt:v=>fmtN(v,2)},
+  agRec:       {sld:"sldAgRec",       txt:"txtAgRec",       mn:200,  mx:600,   fmt:v=>fmtN(v,2)},
+};
+function desdeSlider(c){const s=SLIDERS[c];const el=document.getElementById(s.sld);document.getElementById(s.txt).value=s.fmt(parseFloat(el.value));updateTrack(el);calcular();}
+function desdeTexto(c){
+  const s=SLIDERS[c];
+  let v=parseFloat(document.getElementById(s.txt).value.replace(/\./g,"").replace(",","."));
+  if(isNaN(v))return;
+  v=Math.max(s.mn,Math.min(s.mx,v));
+  const el=document.getElementById(s.sld);el.value=v;updateTrack(el);calcular();
 }
 
-function desdeTexto(campo) {
-  const map = {
-    tonelaje:     ["sldTonelaje",    "txtTonelaje",    10000, 100000, v => v],
-    precio:       ["sldPrecio",      "txtPrecio",      200,   800,    v => v],
-    leyCabeza:    ["sldLeyCabeza",   "txtLeyCabeza",   0.5,   3.0,    v => v],
-    recuperacion: ["sldRecuperacion","txtRecuperacion",80,    99,     v => v],
-    leyConc:      ["sldLeyConc",     "txtLeyConc",     10,    40,     v => v],
-  };
-  const [sldId, txtId, mn, mx] = map[campo];
-  let v = parseFloat(document.getElementById(txtId).value.replace(/\./g,"").replace(",","."));
-  if (isNaN(v)) return;
-  v = Math.max(mn, Math.min(mx, v));
-  const sld = document.getElementById(sldId);
-  sld.value = v;
-  updateSliderTrack(sld);
-  calcular();
-}
-
-// PIN
-function abrirPIN() {
-  document.getElementById("pinModal").classList.add("show");
-  document.getElementById("pinInput").value = "";
-  document.getElementById("pinError").style.display = "none";
-  setTimeout(() => document.getElementById("pinInput").focus(), 100);
-}
-function cerrarPIN() {
-  document.getElementById("pinModal").classList.remove("show");
-}
-function verificarPIN() {
-  const val = document.getElementById("pinInput").value;
-  if (val === PIN) {
+// PIN PARAMS
+function abrirPIN(){document.getElementById("pinModal").classList.add("show");document.getElementById("pinInput").value="";document.getElementById("pinError").style.display="none";setTimeout(()=>document.getElementById("pinInput").focus(),100);}
+function cerrarPIN(){document.getElementById("pinModal").classList.remove("show");}
+function verificarPIN(){
+  if(document.getElementById("pinInput").value===PIN_PARAMS){
     cerrarPIN();
-    document.getElementById("paramsPanel").classList.add("show");
-    document.getElementById("pRefino").value = P.refino;
-    document.getElementById("pDescuento").value = P.descuento;
-    document.getElementById("pFusion").value = P.fusion;
-    document.getElementById("pFactor").value = P.factor;
-    document.getElementById("pRecExig").value = P.recExig;
-    document.getElementById("pLeyExig").value = P.leyExig;
-  } else {
-    document.getElementById("pinError").style.display = "block";
-    document.getElementById("pinInput").value = "";
-    document.getElementById("pinInput").focus();
-  }
+    const pp=document.getElementById("paramsPanel");pp.classList.add("show");
+    document.getElementById("pCuRefino").value=P.cu.refino;document.getElementById("pCuDesc").value=P.cu.descuento;
+    document.getElementById("pFusion").value=P.cu.fusion;document.getElementById("pFactor").value=P.cu.factor;
+    document.getElementById("pRecExig").value=P.cu.recExig;document.getElementById("pLeyExig").value=P.cu.leyExig;
+    document.getElementById("pAuPrecio").value=P.au.precio;document.getElementById("pAuRefino").value=P.au.refino;
+    document.getElementById("pAuDesc").value=P.au.descuento;document.getElementById("pAuFactor").value=P.au.factor;
+    document.getElementById("pAgPrecio").value=P.ag.precio;document.getElementById("pAgRefino").value=P.ag.refino;
+    document.getElementById("pAgDesc").value=P.ag.descuento;document.getElementById("pAgFactor").value=P.ag.factor;
+  } else {document.getElementById("pinError").style.display="block";document.getElementById("pinInput").value="";document.getElementById("pinInput").focus();}
 }
-function cerrarParams() {
-  document.getElementById("paramsPanel").classList.remove("show");
-}
-function guardarParams() {
-  P.refino    = parseFloat(document.getElementById("pRefino").value);
-  P.descuento = parseFloat(document.getElementById("pDescuento").value);
-  P.fusion    = parseFloat(document.getElementById("pFusion").value);
-  P.factor    = parseFloat(document.getElementById("pFactor").value);
-  P.recExig   = parseFloat(document.getElementById("pRecExig").value);
-  P.leyExig   = parseFloat(document.getElementById("pLeyExig").value);
-  // Update chips
-  document.getElementById("chipRefino").textContent   = P.refino;
-  document.getElementById("chipDescuento").textContent = P.descuento;
-  document.getElementById("chipFusion").textContent   = P.fusion;
-  document.getElementById("chipFactor").textContent   = P.factor.toFixed(3);
-  document.getElementById("chipRecExig").textContent  = P.recExig;
-  document.getElementById("chipLeyExig").textContent  = P.leyExig;
-  cerrarParams();
-  calcular();
+function cerrarParams(){document.getElementById("paramsPanel").classList.remove("show");}
+function guardarParams(){
+  P.cu.refino=parseFloat(document.getElementById("pCuRefino").value);
+  P.cu.descuento=parseFloat(document.getElementById("pCuDesc").value);
+  P.cu.fusion=parseFloat(document.getElementById("pFusion").value);
+  P.cu.factor=parseFloat(document.getElementById("pFactor").value);
+  P.cu.recExig=parseFloat(document.getElementById("pRecExig").value);
+  P.cu.leyExig=parseFloat(document.getElementById("pLeyExig").value);
+  P.au.precio=parseFloat(document.getElementById("pAuPrecio").value);
+  P.au.refino=parseFloat(document.getElementById("pAuRefino").value);
+  P.au.descuento=parseFloat(document.getElementById("pAuDesc").value);
+  P.au.factor=parseFloat(document.getElementById("pAuFactor").value);
+  P.ag.precio=parseFloat(document.getElementById("pAgPrecio").value);
+  P.ag.refino=parseFloat(document.getElementById("pAgRefino").value);
+  P.ag.descuento=parseFloat(document.getElementById("pAgDesc").value);
+  P.ag.factor=parseFloat(document.getElementById("pAgFactor").value);
+  document.getElementById("cCuRefino").textContent=P.cu.refino;
+  document.getElementById("cCuDesc").textContent=P.cu.descuento;
+  document.getElementById("cFusion").textContent=P.cu.fusion;
+  document.getElementById("cAuPrecio").textContent=P.au.precio.toFixed(1);
+  document.getElementById("cAgPrecio").textContent=P.ag.precio.toFixed(1);
+  document.getElementById("cRecExig").textContent=P.cu.recExig;
+  document.getElementById("cLeyExig").textContent=P.cu.leyExig;
+  cerrarParams();calcular();
 }
 
-// Init
-document.querySelectorAll("input[type=range]").forEach(updateSliderTrack);
-calcular();
+document.querySelectorAll("input[type=range]").forEach(updateTrack);
 </script>
 </body>
 </html>
