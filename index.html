@@ -232,6 +232,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);}
       <div class="param-field"><label>Cargo refino (US$/oz)</label><input type="number" id="pAuRefino" value="6.0" step="0.1"></div>
       <div class="param-field"><label>Descuento met. (%)</label><input type="number" id="pAuDesc" value="4" step="0.1"></div>
       <div class="param-field"><label>Factor conversión</label><input type="number" id="pAuFactor" value="31.10348" step="0.00001"></div>
+      <div class="param-field"><label>Rec. exigida (%)</label><input type="number" id="pAuRecExig" value="60" step="0.1"></div>
     </div>
     <div class="params-section-title">Plata</div>
     <div class="params-grid-6">
@@ -239,6 +240,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);}
       <div class="param-field"><label>Cargo refino (US$/oz)</label><input type="number" id="pAgRefino" value="0.365" step="0.01"></div>
       <div class="param-field"><label>Descuento met. (%)</label><input type="number" id="pAgDesc" value="4" step="0.1"></div>
       <div class="param-field"><label>Factor conversión</label><input type="number" id="pAgFactor" value="31.10348" step="0.00001"></div>
+      <div class="param-field"><label>Rec. exigida (%)</label><input type="number" id="pAgRecExig" value="60" step="0.1"></div>
     </div>
   </div>
   <div class="params-footer">
@@ -409,14 +411,14 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 </div>
 
 <script>
-const LOGIN_PASS = "delta";
+const LOGIN_PASS = "delta2024";
 const PIN_PARAMS = "1234";
 
 // Parámetros
 let P = {
   cu:{ refino:4.3, descuento:3.8, fusion:43, factor:22.046223, recExig:90.98, leyExig:26.21 },
-  au:{ precio:4869.786, refino:6.0, descuento:4, ley:0.81, rec:63.47, factor:31.10348 },
-  ag:{ precio:78.496, refino:0.365, descuento:4, ley:2.42, rec:373.54, factor:31.10348 }
+  au:{ precio:4869.786, refino:6.0, descuento:4, ley:0.81, rec:63.47, recExig:60, factor:31.10348 },
+  ag:{ precio:78.496, refino:0.365, descuento:4, ley:2.42, rec:373.54, recExig:60, factor:31.10348 }
 };
 
 // LOGIN
@@ -465,14 +467,14 @@ function calcular() {
   // ORO: Finos(oz) = TMS * ley(g/t) / factor * rec
   const auFinos  = tms*auLey/P.au.factor*auRec;
   const auValor  = auFinos*(auPrecio-P.au.refino)/P.au.factor*1000*(1-P.au.descuento/100);
-  const auFinosE = tms*P.au.ley/P.au.factor*(P.au.rec/100);
-  const auValorE = auFinosE*(P.au.precio-P.au.refino)/P.au.factor*1000*(1-P.au.descuento/100);
+  const auFinosE = tms*auLey/P.au.factor*(P.au.recExig/100);
+  const auValorE = auFinosE*(auPrecio-P.au.refino)/P.au.factor*1000*(1-P.au.descuento/100);
 
   // PLATA
   const agFinos  = tms*agLey/P.ag.factor*agRec;
   const agValor  = agFinos*(agPrecio-P.ag.refino)/P.ag.factor*1000*(1-P.ag.descuento/100);
-  const agFinosE = tms*P.ag.ley/P.ag.factor*(P.ag.rec/100);
-  const agValorE = agFinosE*(P.ag.precio-P.ag.refino)/P.ag.factor*1000*(1-P.ag.descuento/100);
+  const agFinosE = tms*agLey/P.ag.factor*(P.ag.recExig/100);
+  const agValorE = agFinosE*(agPrecio-P.ag.refino)/P.ag.factor*1000*(1-P.ag.descuento/100);
 
   const totalReal=cuValor+auValor+agValor;
   const totalExig=cuValorE+auValorE+agValorE;
@@ -551,9 +553,9 @@ function verificarPIN(){
     document.getElementById("pFusion").value=P.cu.fusion;document.getElementById("pFactor").value=P.cu.factor;
     document.getElementById("pRecExig").value=P.cu.recExig;document.getElementById("pLeyExig").value=P.cu.leyExig;
     document.getElementById("pAuPrecio").value=P.au.precio;document.getElementById("pAuRefino").value=P.au.refino;
-    document.getElementById("pAuDesc").value=P.au.descuento;document.getElementById("pAuFactor").value=P.au.factor;
+    document.getElementById("pAuDesc").value=P.au.descuento;document.getElementById("pAuFactor").value=P.au.factor;document.getElementById("pAuRecExig").value=P.au.recExig;
     document.getElementById("pAgPrecio").value=P.ag.precio;document.getElementById("pAgRefino").value=P.ag.refino;
-    document.getElementById("pAgDesc").value=P.ag.descuento;document.getElementById("pAgFactor").value=P.ag.factor;
+    document.getElementById("pAgDesc").value=P.ag.descuento;document.getElementById("pAgFactor").value=P.ag.factor;document.getElementById("pAgRecExig").value=P.ag.recExig;
   } else {document.getElementById("pinError").style.display="block";document.getElementById("pinInput").value="";document.getElementById("pinInput").focus();}
 }
 function cerrarParams(){document.getElementById("paramsPanel").classList.remove("show");}
@@ -567,11 +569,11 @@ function guardarParams(){
   P.au.precio=parseFloat(document.getElementById("pAuPrecio").value);
   P.au.refino=parseFloat(document.getElementById("pAuRefino").value);
   P.au.descuento=parseFloat(document.getElementById("pAuDesc").value);
-  P.au.factor=parseFloat(document.getElementById("pAuFactor").value);
+  P.au.factor=parseFloat(document.getElementById("pAuFactor").value);P.au.recExig=parseFloat(document.getElementById("pAuRecExig").value);
   P.ag.precio=parseFloat(document.getElementById("pAgPrecio").value);
   P.ag.refino=parseFloat(document.getElementById("pAgRefino").value);
   P.ag.descuento=parseFloat(document.getElementById("pAgDesc").value);
-  P.ag.factor=parseFloat(document.getElementById("pAgFactor").value);
+  P.ag.factor=parseFloat(document.getElementById("pAgFactor").value);P.ag.recExig=parseFloat(document.getElementById("pAgRecExig").value);
   document.getElementById("cCuRefino").textContent=P.cu.refino;
   document.getElementById("cCuDesc").textContent=P.cu.descuento;
   document.getElementById("cFusion").textContent=P.cu.fusion;
