@@ -257,7 +257,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);}
         <span class="slider-label">Ley cabeza Cu</span>
         <div class="slider-right"><input type="text" id="txtLeyCabeza" value="1.20" onchange="desdeTexto('leyCabeza')"><span class="slider-unit">% Cu</span></div>
       </div>
-      <input type="range" id="sldLeyCabeza" min="0.5" max="3.0" step="0.01" value="1.20" class="ok" oninput="desdeSlider('leyCabeza')">
+      <input type="range" id="sldLeyCabeza" min="0.01" max="5.0" step="0.001" value="1.20" class="ok" oninput="desdeSlider('leyCabeza')">
     </div>
   </div>
 </div>
@@ -271,14 +271,14 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);}
         <span class="slider-label">Recuperación Cu</span>
         <div class="slider-right"><input type="text" id="txtRecuperacion" value="92.29" onchange="desdeTexto('recuperacion')"><span class="slider-unit">%</span><span class="status-badge status-ok" id="badgeRec">OK</span></div>
       </div>
-      <input type="range" id="sldRecuperacion" min="80" max="99" step="0.01" value="92.29" class="ok" oninput="desdeSlider('recuperacion')">
+      <input type="range" id="sldRecuperacion" min="1" max="100" step="0.001" value="92.29" class="ok" oninput="desdeSlider('recuperacion')">
     </div>
     <div class="slider-row">
       <div class="slider-meta">
         <span class="slider-label">Ley concentrado Cu</span>
         <div class="slider-right"><input type="text" id="txtLeyConc" value="18.56" onchange="desdeTexto('leyConc')"><span class="slider-unit">%</span><span class="status-badge status-low" id="badgeLey">BAJO</span></div>
       </div>
-      <input type="range" id="sldLeyConc" min="10" max="40" step="0.01" value="18.56" class="low" oninput="desdeSlider('leyConc')">
+      <input type="range" id="sldLeyConc" min="0.1" max="60" step="0.001" value="18.56" class="low" oninput="desdeSlider('leyConc')">
     </div>
     <div class="inter-grid">
       <div class="inter-item"><div class="ilabel">Finos Cu (TMF)</div><div class="ivalue" id="rFinosCu">—</div></div>
@@ -296,42 +296,42 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);}
         <span class="slider-label" style="color:var(--amber-dark)">Precio oro</span>
         <div class="slider-right"><input type="text" id="txtAuPrecio" value="4869.8" onchange="desdeTexto('auPrecio')"><span class="slider-unit">US$/oz</span></div>
       </div>
-      <input type="range" id="sldAuPrecio" min="1000" max="8000" step="10" value="4869" class="gold" oninput="desdeSlider('auPrecio')">
+      <input type="range" id="sldAuPrecio" min="1000" max="10000" step="0.001" value="4869" class="gold" oninput="desdeSlider('auPrecio')">
     </div>
     <div class="slider-row">
       <div class="slider-meta">
         <span class="slider-label" style="color:var(--amber-dark)">Ley cabeza Au</span>
         <div class="slider-right"><input type="text" id="txtAuLey" value="0.81" onchange="desdeTexto('auLey')"><span class="slider-unit">g/t</span></div>
       </div>
-      <input type="range" id="sldAuLey" min="0.1" max="5.0" step="0.01" value="0.81" class="gold" oninput="desdeSlider('auLey')">
+      <input type="range" id="sldAuLey" min="0.01" max="20.0" step="0.001" value="0.81" class="gold" oninput="desdeSlider('auLey')">
     </div>
     <div class="slider-row">
       <div class="slider-meta">
         <span class="slider-label" style="color:var(--amber-dark)">Rec. oro</span>
         <div class="slider-right"><input type="text" id="txtAuRec" value="63.47" onchange="desdeTexto('auRec')"><span class="slider-unit">%</span></div>
       </div>
-      <input type="range" id="sldAuRec" min="40" max="90" step="0.01" value="63.47" class="gold" oninput="desdeSlider('auRec')">
+      <input type="range" id="sldAuRec" min="1" max="100" step="0.001" value="63.47" class="gold" oninput="desdeSlider('auRec')">
     </div>
     <div class="slider-row" style="margin-top:10px;padding-top:10px;border-top:1px solid #f0f0f0;">
       <div class="slider-meta">
         <span class="slider-label" style="color:var(--purple-dark)">Precio plata</span>
         <div class="slider-right"><input type="text" id="txtAgPrecio" value="78.5" onchange="desdeTexto('agPrecio')"><span class="slider-unit">US$/oz</span></div>
       </div>
-      <input type="range" id="sldAgPrecio" min="10" max="200" step="0.5" value="78.5" class="silver" oninput="desdeSlider('agPrecio')">
+      <input type="range" id="sldAgPrecio" min="10" max="500" step="0.001" value="78.5" class="silver" oninput="desdeSlider('agPrecio')">
     </div>
     <div class="slider-row">
       <div class="slider-meta">
         <span class="slider-label" style="color:var(--purple-dark)">Ley cabeza Ag</span>
         <div class="slider-right"><input type="text" id="txtAgLey" value="2.42" onchange="desdeTexto('agLey')"><span class="slider-unit">g/t</span></div>
       </div>
-      <input type="range" id="sldAgLey" min="0.1" max="20.0" step="0.01" value="2.42" class="silver" oninput="desdeSlider('agLey')">
+      <input type="range" id="sldAgLey" min="0.01" max="50.0" step="0.001" value="2.42" class="silver" oninput="desdeSlider('agLey')">
     </div>
     <div class="slider-row">
       <div class="slider-meta">
         <span class="slider-label" style="color:var(--purple-dark)">Rec. plata</span>
         <div class="slider-right"><input type="text" id="txtAgRec" value="373.54" onchange="desdeTexto('agRec')"><span class="slider-unit">%</span></div>
       </div>
-      <input type="range" id="sldAgRec" min="200" max="600" step="0.1" value="373.54" class="silver" oninput="desdeSlider('agRec')">
+      <input type="range" id="sldAgRec" min="1" max="1000" step="0.001" value="373.54" class="silver" oninput="desdeSlider('agRec')">
     </div>
     <div class="inter-grid">
       <div class="inter-item"><div class="ilabel">Finos Au (oz)</div><div class="ivalue" id="rFinosAu">—</div></div>
@@ -499,17 +499,17 @@ function setDiff(id,v){
 
 // SLIDERS CONFIG
 const SLIDERS={
-  tonelaje:    {sld:"sldTonelaje",    txt:"txtTonelaje",    mn:1000, mx:150000,fmt:v=>fmtN(v,3)},
-  precio:      {sld:"sldPrecio",      txt:"txtPrecio",      mn:200,  mx:800,   fmt:v=>fmtN(v,1)},
-  leyCabeza:   {sld:"sldLeyCabeza",   txt:"txtLeyCabeza",   mn:0.5,  mx:3.0,   fmt:v=>fmtN(v,2)},
-  recuperacion:{sld:"sldRecuperacion",txt:"txtRecuperacion",mn:80,   mx:99,    fmt:v=>fmtN(v,2)},
-  leyConc:     {sld:"sldLeyConc",     txt:"txtLeyConc",     mn:10,   mx:40,    fmt:v=>fmtN(v,2)},
-  auPrecio:    {sld:"sldAuPrecio",    txt:"txtAuPrecio",    mn:1000, mx:8000,  fmt:v=>fmtN(v,1)},
-  auLey:       {sld:"sldAuLey",       txt:"txtAuLey",       mn:0.1,  mx:5.0,   fmt:v=>fmtN(v,2)},
-  auRec:       {sld:"sldAuRec",       txt:"txtAuRec",       mn:40,   mx:90,    fmt:v=>fmtN(v,2)},
-  agPrecio:    {sld:"sldAgPrecio",    txt:"txtAgPrecio",    mn:10,   mx:200,   fmt:v=>fmtN(v,1)},
-  agLey:       {sld:"sldAgLey",       txt:"txtAgLey",       mn:0.1,  mx:20.0,  fmt:v=>fmtN(v,2)},
-  agRec:       {sld:"sldAgRec",       txt:"txtAgRec",       mn:200,  mx:600,   fmt:v=>fmtN(v,2)},
+  tonelaje:    {sld:"sldTonelaje",    txt:"txtTonelaje",    mn:1000, mx:150000,fmt:v=>fmtN(v,4)},
+  precio:      {sld:"sldPrecio",      txt:"txtPrecio",      mn:200,  mx:800,   fmt:v=>fmtN(v,4)},
+  leyCabeza:   {sld:"sldLeyCabeza",   txt:"txtLeyCabeza",   mn:0.01, mx:5.0,   fmt:v=>fmtN(v,4)},
+  recuperacion:{sld:"sldRecuperacion",txt:"txtRecuperacion",mn:1,    mx:100,    fmt:v=>fmtN(v,4)},
+  leyConc:     {sld:"sldLeyConc",     txt:"txtLeyConc",     mn:0.1,  mx:60,    fmt:v=>fmtN(v,4)},
+  auPrecio:    {sld:"sldAuPrecio",    txt:"txtAuPrecio",    mn:100,  mx:10000,  fmt:v=>fmtN(v,4)},
+  auLey:       {sld:"sldAuLey",       txt:"txtAuLey",       mn:0.01, mx:20.0,   fmt:v=>fmtN(v,4)},
+  auRec:       {sld:"sldAuRec",       txt:"txtAuRec",       mn:1,    mx:100,    fmt:v=>fmtN(v,4)},
+  agPrecio:    {sld:"sldAgPrecio",    txt:"txtAgPrecio",    mn:1,    mx:500,   fmt:v=>fmtN(v,4)},
+  agLey:       {sld:"sldAgLey",       txt:"txtAgLey",       mn:0.01, mx:50.0,  fmt:v=>fmtN(v,4)},
+  agRec:       {sld:"sldAgRec",       txt:"txtAgRec",       mn:1,    mx:1000,   fmt:v=>fmtN(v,4)},
 };
 function desdeSlider(c){const s=SLIDERS[c];const el=document.getElementById(s.sld);document.getElementById(s.txt).value=s.fmt(parseFloat(el.value));updateTrack(el);calcular();}
 function parsearNumero(str) {
