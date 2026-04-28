@@ -465,15 +465,15 @@ function calcular() {
   const cuValorE = cuFinosE*(precio-P.cu.refino)*P.cu.factor*(1-P.cu.descuento/100)-cuPesoE*P.cu.fusion;
 
   // ORO: Finos(oz) = TMS * ley(g/t) / factor * rec
-  const auFinos  = tms*auLey/P.au.factor*auRec;
-  const auValor  = auFinos*(auPrecio-P.au.refino)/P.au.factor*1000*(1-P.au.descuento/100);
-  const auFinosE = tms*auLey/P.au.factor*(P.au.recExig/100);
+  const auFinos  = tms*auLey/1000*auRec; // kgf
+  const auValor  = auFinos*(auPrecio-P.au.refino)/P.au.factor*1000*(1-P.au.descuento/100); // finos en kgf → /factor*1000 convierte a oz
+  const auFinosE = tms*auLey/1000*(P.au.recExig/100); // kgf
   const auValorE = auFinosE*(auPrecio-P.au.refino)/P.au.factor*1000*(1-P.au.descuento/100);
 
   // PLATA
-  const agFinos  = tms*agLey/P.ag.factor*agRec;
+  const agFinos  = tms*agLey/1000*agRec; // kgf
   const agValor  = agFinos*(agPrecio-P.ag.refino)/P.ag.factor*1000*(1-P.ag.descuento/100);
-  const agFinosE = tms*agLey/P.ag.factor*(P.ag.recExig/100);
+  const agFinosE = tms*agLey/1000*(P.ag.recExig/100); // kgf
   const agValorE = agFinosE*(agPrecio-P.ag.refino)/P.ag.factor*1000*(1-P.ag.descuento/100);
 
   const totalReal=cuValor+auValor+agValor;
@@ -493,8 +493,8 @@ function calcular() {
   // Intermedios
   document.getElementById("rFinosCu").textContent=fmtN(cuFinos)+" TMF";
   document.getElementById("rPesoCu").textContent=Math.round(cuPeso).toLocaleString("es-CL")+" TMS";
-  document.getElementById("rFinosAu").textContent=fmtN(auFinos,4)+" oz";
-  document.getElementById("rFinosAg").textContent=fmtN(agFinos,2)+" oz";
+  document.getElementById("rFinosAu").textContent=fmtN(auFinos,4)+" kgf";
+  document.getElementById("rFinosAg").textContent=fmtN(agFinos,2)+" kgf";
 
   // Tabla
   setCell("tCuReal",fmtShort(cuValor));setCell("tCuExig",fmtShort(cuValorE));setDiff("tCuDiff",cuValor-cuValorE);
