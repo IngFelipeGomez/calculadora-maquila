@@ -118,21 +118,6 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);}
 .diff-pos{color:var(--teal-mid);}
 .diff-neg{color:var(--red-mid);}
 
-/* ── BIG CARDS ── */
-.big-margen{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px;}
-@media(max-width:500px){.big-margen{grid-template-columns:1fr;}}
-.bm-item{border-radius:var(--radius-sm);padding:11px 14px;}
-.bm-item .bmlabel{font-size:10px;margin-bottom:3px;}
-.bm-item .bmvalue{font-size:17px;font-weight:500;font-family:"DM Mono",monospace;}
-.bm-copper{background:var(--teal-pale);}
-.bm-copper .bmlabel{color:var(--teal-mid);}
-.bm-copper .bmvalue{color:var(--teal-dark);}
-.bm-gold{background:var(--amber-pale);}
-.bm-gold .bmlabel{color:var(--amber-mid);}
-.bm-gold .bmvalue{color:var(--amber-dark);}
-.bm-silver{background:var(--purple-pale);}
-.bm-silver .bmlabel{color:var(--purple-mid);}
-.bm-silver .bmvalue{color:var(--purple-dark);}
 
 .big-total{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;background:var(--teal-dark);border-radius:var(--radius-sm);padding:14px 18px;margin-top:10px;}
 .bt-label{font-size:11px;color:rgba(255,255,255,0.6);}
@@ -380,15 +365,11 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);}
         </tbody>
       </table>
     </div>
-    <div class="big-margen">
-      <div class="bm-item bm-copper"><div class="bmlabel">Valorización Cobre</div><div class="bmvalue" id="bmCu">USD —</div></div>
-      <div class="bm-item bm-gold"><div class="bmlabel">Valorización Oro</div><div class="bmvalue" id="bmAu">USD —</div></div>
-      <div class="bm-item bm-silver"><div class="bmlabel">Valorización Plata</div><div class="bmvalue" id="bmAg">USD —</div></div>
-    </div>
+    
     <div class="big-total">
-      <div><div class="bt-label">Resultado consolidado</div><div class="bt-name">Margen Metalúrgico</div></div>
-      <div class="bt-value" id="btTotal">USD —</div>
-      <div class="bt-delta pos" id="btDelta">—</div>
+      <div><div class="bt-label">Resultado consolidado vs exigencia</div><div class="bt-name">Margen Metalúrgico</div></div>
+      <div id="btDelta" style="font-family:'DM Mono',monospace;font-size:26px;font-weight:500;color:#5dcaa5;">—</div>
+      <div style="text-align:right"><div style="font-size:10px;color:rgba(255,255,255,0.5);margin-bottom:2px;">Valor real total</div><div style="font-family:'DM Mono',monospace;font-size:13px;color:rgba(255,255,255,0.7);" id="btTotal">USD —</div></div>
     </div>
   </div>
 </div>
@@ -503,13 +484,10 @@ function calcular() {
   setCell("tTotalReal",fmtShort(totalReal));setCell("tTotalExig",fmtShort(totalExig));setDiff("tTotalDiff",delta);
 
   // Big
-  document.getElementById("bmCu").textContent=fmtUSD(cuValor);
-  document.getElementById("bmAu").textContent=fmtUSD(auValor);
-  document.getElementById("bmAg").textContent=fmtUSD(agValor);
   document.getElementById("btTotal").textContent=fmtUSD(totalReal);
   const bd=document.getElementById("btDelta");
-  bd.textContent=(delta>=0?"+ ":"- ")+"USD "+Math.abs(Math.round(delta)).toLocaleString("es-CL")+" vs exig.";
-  bd.className="bt-delta "+(delta>=0?"pos":"neg");
+  bd.textContent=(delta>=0?"+ USD ":"- USD ")+Math.abs(Math.round(delta)).toLocaleString("es-CL");
+  bd.style.color=delta>=0?"#5dcaa5":"#f09595";
 }
 
 function setCell(id,v){document.getElementById(id).textContent=v;}
