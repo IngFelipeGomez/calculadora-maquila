@@ -243,7 +243,7 @@ input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.2);}
         <span class="slider-label">Tonelaje mineral</span>
         <div class="slider-right"><input type="text" id="txtTonelaje" value="57.000" onchange="desdeTexto('tonelaje')"><span class="slider-unit">TMS</span></div>
       </div>
-      <input type="range" id="sldTonelaje" min="10000" max="100000" step="500" value="57000" class="ok" oninput="desdeSlider('tonelaje')">
+      <input type="range" id="sldTonelaje" min="1000" max="150000" step="1" value="57000" class="ok" oninput="desdeSlider('tonelaje')">
     </div>
     <div class="slider-row">
       <div class="slider-meta">
@@ -499,7 +499,7 @@ function setDiff(id,v){
 
 // SLIDERS CONFIG
 const SLIDERS={
-  tonelaje:    {sld:"sldTonelaje",    txt:"txtTonelaje",    mn:10000,mx:100000,fmt:v=>Math.round(v).toLocaleString("es-CL")},
+  tonelaje:    {sld:"sldTonelaje",    txt:"txtTonelaje",    mn:1000, mx:150000,fmt:v=>fmtN(v,3)},
   precio:      {sld:"sldPrecio",      txt:"txtPrecio",      mn:200,  mx:800,   fmt:v=>fmtN(v,1)},
   leyCabeza:   {sld:"sldLeyCabeza",   txt:"txtLeyCabeza",   mn:0.5,  mx:3.0,   fmt:v=>fmtN(v,2)},
   recuperacion:{sld:"sldRecuperacion",txt:"txtRecuperacion",mn:80,   mx:99,    fmt:v=>fmtN(v,2)},
@@ -512,9 +512,43 @@ const SLIDERS={
   agRec:       {sld:"sldAgRec",       txt:"txtAgRec",       mn:200,  mx:600,   fmt:v=>fmtN(v,2)},
 };
 function desdeSlider(c){const s=SLIDERS[c];const el=document.getElementById(s.sld);document.getElementById(s.txt).value=s.fmt(parseFloat(el.value));updateTrack(el);calcular();}
+function parsearNumero(str) {
+  str = str.trim();
+  // If contains both . and , → determine which is decimal
+  if (str.includes(".") && str.includes(",")) {
+    const lastDot = str.lastIndexOf(".");
+    const lastComma = str.lastIndexOf(",");
+    if (lastComma > lastDot) {
+      // comma is decimal: remove dots, replace comma with dot
+      return parseFloat(str.replace(/\./g,"").replace(",","."));
+    } else {
+      // dot is decimal: remove commas
+      return parseFloat(str.replace(/,/g,""));
+    }
+  }
+  // Only comma → could be thousands (1,000) or decimal (1,5)
+  if (str.includes(",") && !str.includes(".")) {
+    const parts = str.split(",");
+    if (parts[1] && parts[1].length <= 3 && parts[0].length <= 3) {
+      // ambiguous — treat as decimal (Chilean format)
+      return parseFloat(str.replace(",","."));
+    }
+    return parseFloat(str.replace(",","."));
+  }
+  // Only dot → could be thousands or decimal
+  if (str.includes(".") && !str.includes(",")) {
+    const parts = str.split(".");
+    if (parts[1] && parts[1].length === 3) {
+      // likely thousands separator
+      return parseFloat(str.replace(/\./g,""));
+    }
+    return parseFloat(str);
+  }
+  return parseFloat(str);
+}
 function desdeTexto(c){
   const s=SLIDERS[c];
-  let v=parseFloat(document.getElementById(s.txt).value.replace(/\./g,"").replace(",","."));
+  let v=parsearNumero(document.getElementById(s.txt).value);
   if(isNaN(v))return;
   v=Math.max(s.mn,Math.min(s.mx,v));
   const el=document.getElementById(s.sld);el.value=v;updateTrack(el);calcular();
